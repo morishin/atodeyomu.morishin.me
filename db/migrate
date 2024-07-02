@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+set -eu
+
+ENV_FILE=".env"
+
+cd "$(dirname "$0")/.."
+
+if [ -f "$ENV_FILE" ]; then
+  set -a; source $ENV_FILE; set +a
+fi
+
+npx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script --output db/schema.sql
+echo "-- Auto generated from schema.prisma\n" | cat - db/schema.sql > temp && mv temp db/schema.sql
+
+export PGPASSWORD=$POSTGRES_PASSWORD
+psqldef -U $POSTGRES_USER -p $POSTGRES_PORT $POSTGRES_DATABASE --enable-drop-table < db/schema.sql
