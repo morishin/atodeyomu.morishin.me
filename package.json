@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prepare": "panda codegen",
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
@@ -18,6 +19,7 @@
     "react-dom": "19.0.0-rc.0"
   },
   "devDependencies": {
+    "@pandacss/dev": "^0.41.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -25,7 +27,7 @@
     "eslint": "^8",
     "eslint-config-next": "15.0.0-canary.49",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-unused-imports": "^4.0.0",
+    "eslint-plugin-unused-imports": "^3.2.0",
     "prisma": "^5.16.1",
     "typescript": "^5"
   }
