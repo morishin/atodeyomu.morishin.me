@@ -1,4 +1,4 @@
-import { handlers } from "@/app/lib/auth/auth";
+import { handlers } from "@/lib/auth/auth";
 
 export const GET = handlers.GET;
 export const POST = handlers.POST;

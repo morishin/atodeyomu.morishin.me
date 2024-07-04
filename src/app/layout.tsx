@@ -1,8 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 
-import ClientSessionProvider from "@/app/components/ClientSessionProvider";
-import { auth } from "@/app/lib/auth/auth";
+import ClientSessionProvider from "@/components/ClientSessionProvider";
+import { auth } from "@/lib/auth/auth";
 
 export const metadata: Metadata = {
   title: "Create Next App",
