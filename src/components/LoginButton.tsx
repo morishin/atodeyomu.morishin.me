@@ -1,6 +1,10 @@
 "use client";
 import { signIn } from "next-auth/react";
 
+import { Button } from "@/components/park-ui/button";
+
 export const LoginButton = () => (
-  <button onClick={() => signIn()}>Login</button>
+  <Button size="md" onClick={() => signIn()}>
+    Login
+  </Button>
 );

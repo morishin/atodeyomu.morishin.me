@@ -10,7 +10,7 @@ cp .env.example .env # And edit .env
 ```
 
 ```sh
-npm i
+npm i --legacy-peer-deps
 npm run dev
 ```
 
