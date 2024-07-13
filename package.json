@@ -9,9 +9,13 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "dependencies": {
     "@ark-ui/react": "^3.5.0",
     "@auth/prisma-adapter": "^2.4.1",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^5.16.1",
     "babel-plugin-react-compiler": "^0.0.0-experimental-696af53-20240625",
     "next": "15.0.0-canary.49",
@@ -21,6 +25,7 @@
   },
   "devDependencies": {
     "@pandacss/dev": "^0.41.0",
+    "@park-ui/cli": "^0.7.1",
     "@park-ui/panda-preset": "^0.38.1",
     "@types/node": "^20",
     "@types/react": "^18",
@@ -31,6 +36,7 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-unused-imports": "^3.2.0",
     "prisma": "^5.16.1",
+    "tsx": "^4.16.2",
     "typescript": "^5"
   }
 }

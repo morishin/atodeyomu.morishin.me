@@ -14,3 +14,5 @@ echo "-- Auto generated from schema.prisma\n" | cat - db/schema.sql > temp && mv
 
 export PGPASSWORD=$POSTGRES_PASSWORD
 psqldef -U $POSTGRES_USER -p $POSTGRES_PORT $POSTGRES_DATABASE --enable-drop-table < db/schema.sql
+
+npx prisma generate
