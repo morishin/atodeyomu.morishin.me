@@ -6,6 +6,7 @@ import authConfig from "@/lib/auth/auth.config";
 
 const prisma = new PrismaClient();
 
+// https://authjs.dev/getting-started/migrating-to-v5#authenticating-server-side
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "database" },

@@ -1,38 +1,22 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 async function main() {
+  // await prisma.user.deleteMany();
+  const now = new Date();
   await prisma.user.upsert({
     where: { email: "alice@prisma.io" },
     update: {},
     create: {
       email: "alice@prisma.io",
-      name: "Alice",
+      name: "alice",
       pages: {
         createMany: {
-          data: [
-            {
-              title: "Check out Prisma with Next.js",
-              url: "https://www.prisma.io/nextjs",
-              description:
-                "Learn how to use Prisma with Next.js in this step-by-step tutorial.",
-            },
-            {
-              title: "Check out Nexus with Prisma",
-              url: "https://www.nexusjs.org/prisma",
-              description:
-                "Learn how to use Nexus with Prisma in this step-by-step tutorial.",
-            },
-            {
-              title: "Check out Next.js",
-              url: "https://nextjs.org",
-              description: "The React Framework for Production.",
-            },
-            {
-              title: "Check out Nexus",
-              url: "https://nexusjs.org",
-              description: "The Schema-First GraphQL Framework.",
-            },
-          ],
+          data: Array.from({ length: 200 }).map((_, i) => ({
+            title: `Page ${i}`,
+            url: `https://example.com/page/${i}`,
+            description: `Description for page ${i}`,
+            createdAt: new Date(now.getTime() + i),
+          })),
         },
       },
     },
