@@ -1,3 +1,4 @@
+import { PageList } from "@/app/[userName]/PageList";
 import { Tabs } from "@/components/park-ui";
 import { prisma } from "@/lib/prisma";
 import { VStack } from "@styled-system/jsx";
@@ -23,7 +24,9 @@ export default async function Page({
           </Tabs.Trigger>
           <Tabs.Indicator />
         </Tabs.List>
-        <Tabs.Content value="unread">Know React? Check out Solid!</Tabs.Content>
+        <Tabs.Content value="unread">
+          <PageList userName={params.userName} />
+        </Tabs.Content>
         <Tabs.Content value="read">Know Solid? Check out Svelte!</Tabs.Content>
       </Tabs.Root>
     </VStack>

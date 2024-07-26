@@ -5,6 +5,17 @@ import { prisma } from "@/lib/prisma";
 
 const perPage = 20;
 
+export type ApiUserPageResponse = {
+  id: string;
+  userId: string;
+  url: string;
+  title: string;
+  description: string;
+  image: string | null;
+  readAt: string | null;
+  createdAt: string;
+}[];
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { userName: string } }
