@@ -2,6 +2,7 @@ import { PageList } from "@/app/[userName]/PageList";
 import { Tabs } from "@/components/park-ui";
 import { prisma } from "@/lib/prisma";
 import { VStack } from "@styled-system/jsx";
+import { AddPageForm } from "@/app/[userName]/AddPageForm";
 
 export default async function Page({
   params,
@@ -14,6 +15,7 @@ export default async function Page({
   return (
     <VStack>
       <h1>{user.name}</h1>
+      <AddPageForm />
       <Tabs.Root defaultValue="unread">
         <Tabs.List>
           <Tabs.Trigger key={"unread"} value={"unread"}>
