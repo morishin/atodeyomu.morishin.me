@@ -1,15 +1,34 @@
-"use client";
-
 import { PlusIcon } from "lucide-react";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { SWRInfiniteResponse } from "swr/infinite";
 
+import { requestAddPage } from "@/app/[userName]/AddPageFormAction";
+import { ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
 import { Button } from "@/components/park-ui/button";
 import { Field } from "@/components/park-ui/field";
 import { HStack } from "@styled-system/jsx";
-import { requestAddPage } from "@/app/[userName]/AddPageFormAction";
 
-export function AddPageForm() {
-  const [, action, isPending] = useActionState(requestAddPage, {});
+export function AddPageForm({
+  isAvailable,
+  mutate,
+}: {
+  isAvailable: boolean;
+  mutate: SWRInfiniteResponse<ApiUserPageResponse>["mutate"];
+}) {
+  const [{ state, timestamp }, action, isPending] = useActionState(
+    requestAddPage,
+    {
+      state: "idle",
+      timestamp: Date.now(),
+    } as const
+  );
+
+  useEffect(() => {
+    if (state === "success") {
+      mutate();
+    }
+  }, [state, timestamp, mutate]);
+
   return (
     <form action={action}>
       <HStack maxW="100vw" flexWrap="wrap" w="xl">
@@ -19,9 +38,10 @@ export function AddPageForm() {
             name="url"
             fontSize="xl"
             placeholder="https://..."
+            disabled={!isAvailable || isPending}
           />
         </Field.Root>
-        <Button type="submit" loading={isPending}>
+        <Button type="submit" disabled={!isAvailable} loading={isPending}>
           <PlusIcon />
           Add to Unreads
         </Button>

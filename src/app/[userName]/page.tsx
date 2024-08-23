@@ -1,36 +1,26 @@
-import { PageList } from "@/app/[userName]/PageList";
-import { Tabs } from "@/components/park-ui";
+import { Content } from "@/app/[userName]/Content";
+import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
+import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 import { VStack } from "@styled-system/jsx";
-import { AddPageForm } from "@/app/[userName]/AddPageForm";
+
+type Page = ApiUserPageResponse[number];
 
 export default async function Page({
-  params,
+  params: { userName },
 }: {
   params: { userName: string };
 }) {
   const user = await prisma.user.findUniqueOrThrow({
-    where: { name: params.userName },
+    where: { name: userName },
   });
+  const session = await auth();
+  const isMyPage = session?.user?.id === user.id;
+
   return (
     <VStack>
       <h1>{user.name}</h1>
-      <AddPageForm />
-      <Tabs.Root defaultValue="unread">
-        <Tabs.List>
-          <Tabs.Trigger key={"unread"} value={"unread"}>
-            Unread
-          </Tabs.Trigger>
-          <Tabs.Trigger key={"read"} value={"read"}>
-            Read
-          </Tabs.Trigger>
-          <Tabs.Indicator />
-        </Tabs.List>
-        <Tabs.Content value="unread">
-          <PageList userName={params.userName} />
-        </Tabs.Content>
-        <Tabs.Content value="read">Know Solid? Check out Svelte!</Tabs.Content>
-      </Tabs.Root>
+      <Content userName={user.name} isMyPage={isMyPage} />
     </VStack>
   );
 }

@@ -1,46 +1,61 @@
-"use client";
+import { SWRInfiniteResponse } from "swr/infinite";
 
-import useSWRInfinite from "swr/infinite";
-import { useEffect } from "react";
-
-import { Box, HStack, Stack, VStack } from "@styled-system/jsx";
-import { Text } from "@/components/park-ui";
 import { ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
+import { Text } from "@/components/park-ui";
+import { Box, HStack, VStack } from "@styled-system/jsx";
 
-type Page = ApiUserPageResponse[number];
-
-const fetcher: (url: string) => Promise<ApiUserPageResponse> = (url: string) =>
-  fetch(url).then((r) => r.json());
-
-export const PageList = ({ userName }: { userName: string }) => {
-  const getKey = (pageIndex: number, previousPageData: Page[]) => {
-    if (previousPageData && !previousPageData.length) return null;
-    return `/api/users/${userName}/pages?page=${pageIndex}`;
-  };
-
-  const { data, size, setSize } = useSWRInfinite(getKey, fetcher);
-
-  useEffect(() => {
-    console.log("🔥", JSON.stringify(data, null, 2));
-  }, [data]);
-
+export const PageList = ({
+  data,
+  size,
+  setSize,
+}: Pick<
+  SWRInfiniteResponse<ApiUserPageResponse>,
+  "data" | "size" | "setSize"
+>) => {
   return (
-    <VStack>
+    <VStack alignItems="stretch">
       {data?.map((pages) =>
         pages.map((page) => (
-          <Stack key={page.id}>
-            <HStack>
-              <Box width="50px" height="50px" bg="gray" borderRadius="4px">
-                {page.image ? (
-                  <img src={page.image} width="50" height="50" />
-                ) : null}
-              </Box>
-              <VStack>
-                <Text as="h3">{page.title}</Text>
-                <Text>{page.description}</Text>
-              </VStack>
-            </HStack>
-          </Stack>
+          <HStack key={page.id} alignItems="flex-start">
+            <Box
+              width="64px"
+              height="64px"
+              bg="gray"
+              borderRadius="4px"
+              borderWidth="thin"
+              borderColor="lightgray"
+              overflow="hidden"
+            >
+              {page.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  alt=""
+                  src={page.image}
+                  width="64"
+                  height="64"
+                  style={{
+                    objectFit: "cover",
+                    backgroundColor: "white",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                />
+              ) : null}
+            </Box>
+            <VStack flex="1" alignItems="flex-start" gap="0">
+              <Text
+                as="h3"
+                fontWeight="semibold"
+                textOverflow="ellipsis"
+                lineClamp={1}
+              >
+                {page.title}
+              </Text>
+              <Text size="xs" textOverflow="ellipsis" lineClamp={2}>
+                {page.description}
+              </Text>
+            </VStack>
+          </HStack>
         ))
       )}
       <button onClick={() => setSize(size + 1)}>Load more</button>
