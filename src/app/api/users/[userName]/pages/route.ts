@@ -3,8 +3,6 @@ import { type NextRequest } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 
-const perPage = 20;
-
 export type ApiUserPageResponse = {
   id: string;
   userId: string;
@@ -31,10 +29,16 @@ export async function GET(
   }
 
   const searchParams = request.nextUrl.searchParams;
+  const isRead = Boolean(Number(searchParams.get("read")));
   const page = Math.max(1, Number(searchParams.get("page")));
+  const perPage = Math.min(
+    100,
+    Math.max(1, Number(searchParams.get("perPage")))
+  );
   const pages = await prisma.page.findMany({
     where: {
       userId: user.id,
+      readAt: isRead ? { not: null } : null,
     },
     orderBy: {
       createdAt: "desc",

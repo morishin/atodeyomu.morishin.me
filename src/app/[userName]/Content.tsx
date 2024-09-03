@@ -1,6 +1,8 @@
 "use client";
 
 import useSWRInfinite from "swr/infinite";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { PageList } from "@/app/[userName]/PageList";
 import { Tabs } from "@/components/park-ui";
@@ -10,44 +12,82 @@ import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route
 
 type Page = ApiUserPageResponse[number];
 
+const perPage = 20;
+
 const fetcher: (url: string) => Promise<ApiUserPageResponse> = (url: string) =>
   fetch(url).then((r) => r.json());
 
 export const Content = ({
   userName,
   isMyPage,
+  initialTab,
 }: {
   userName: string;
   isMyPage: boolean;
+  initialTab: "read" | "unread";
 }) => {
-  const getKey = (pageIndex: number, previousPageData: Page[]) => {
+  const getKeyUnread = (pageIndex: number, previousPageData: Page[]) => {
     if (previousPageData && !previousPageData.length) return null;
-    return `/api/users/${userName}/pages?page=${pageIndex + 1}`;
+    return `/api/users/${userName}/pages?perPage=${perPage}&page=${pageIndex + 1}`;
   };
-
-  const { data, size, setSize, mutate } = useSWRInfinite(getKey, fetcher, {
+  const unreadData = useSWRInfinite(getKeyUnread, fetcher, {
     revalidateOnFocus: false,
     revalidateIfStale: false,
     revalidateFirstPage: false,
   });
 
+  const getKeyRead = (pageIndex: number, previousPageData: Page[]) => {
+    if (previousPageData && !previousPageData.length) return null;
+    return `/api/users/${userName}/pages?perPage=${perPage}&page=${pageIndex + 1}&read=1`;
+  };
+  const readData = useSWRInfinite(getKeyRead, fetcher, {
+    revalidateOnFocus: false,
+    revalidateIfStale: false,
+    revalidateFirstPage: false,
+  });
+
+  const showLoadMoreUnread =
+    (unreadData.data?.[unreadData.data.length - 1]?.length ?? 0) === perPage;
+  const showLoadMoreRead =
+    (readData.data?.[readData.data.length - 1]?.length ?? 0) === perPage;
+
+  const pathname = usePathname();
+
   return (
     <VStack>
-      <AddPageForm isAvailable={isMyPage} mutate={mutate} />
-      <Tabs.Root defaultValue="unread" w="xl" maxW="100vw">
+      <AddPageForm isAvailable={isMyPage} mutate={unreadData.mutate} />
+      <Tabs.Root defaultValue={initialTab} w="xl" maxW="100vw">
         <Tabs.List>
-          <Tabs.Trigger key={"unread"} value={"unread"}>
-            Unread
-          </Tabs.Trigger>
-          <Tabs.Trigger key={"read"} value={"read"}>
-            Read
-          </Tabs.Trigger>
+          <Link href={pathname}>
+            <Tabs.Trigger key={"unread"} value={"unread"}>
+              Unread
+            </Tabs.Trigger>
+          </Link>
+          <Link href="?read=1">
+            <Tabs.Trigger key={"read"} value={"read"}>
+              Read
+            </Tabs.Trigger>
+          </Link>
           <Tabs.Indicator />
         </Tabs.List>
         <Tabs.Content value="unread">
-          <PageList data={data} size={size} setSize={setSize} />
+          <PageList
+            data={unreadData.data}
+            size={unreadData.size}
+            setSize={unreadData.setSize}
+            isLoading={unreadData.isLoading}
+            showLoadMore={showLoadMoreUnread}
+          />
         </Tabs.Content>
-        <Tabs.Content value="read">Know Solid? Check out Svelte!</Tabs.Content>
+        <Tabs.Content value="read">
+          <PageList
+            data={readData.data}
+            size={readData.size}
+            setSize={readData.setSize}
+            isLoading={readData.isLoading}
+            showLoadMore={showLoadMoreRead}
+          />
+        </Tabs.Content>
       </Tabs.Root>
     </VStack>
   );

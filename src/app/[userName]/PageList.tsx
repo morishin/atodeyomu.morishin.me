@@ -3,15 +3,21 @@ import { SWRInfiniteResponse } from "swr/infinite";
 import { ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
 import { Text } from "@/components/park-ui";
 import { Box, HStack, VStack } from "@styled-system/jsx";
+import { Button } from "@/components/park-ui/button";
 
 export const PageList = ({
   data,
   size,
   setSize,
+  isLoading,
+  showLoadMore,
 }: Pick<
   SWRInfiniteResponse<ApiUserPageResponse>,
   "data" | "size" | "setSize"
->) => {
+> & {
+  isLoading: boolean;
+  showLoadMore: boolean;
+}) => {
   return (
     <VStack alignItems="stretch">
       {data?.map((pages) =>
@@ -51,14 +57,35 @@ export const PageList = ({
               >
                 {page.title}
               </Text>
-              <Text size="xs" textOverflow="ellipsis" lineClamp={2}>
+              <Text size="xs" textOverflow="ellipsis" lineClamp={1}>
+                {new URL(page.url).hostname}
+              </Text>
+              <Text
+                size="xs"
+                textOverflow="ellipsis"
+                lineClamp={1}
+                color="fg.subtle"
+              >
                 {page.description}
               </Text>
             </VStack>
+            <Button size="xs" variant="subtle">
+              Mark as read
+            </Button>
           </HStack>
         ))
       )}
-      <button onClick={() => setSize(size + 1)}>Load more</button>
+      {showLoadMore || isLoading ? (
+        <Button
+          variant="outline"
+          loading={isLoading}
+          onClick={() => setSize(size + 1)}
+        >
+          Load More
+        </Button>
+      ) : (
+        <Text textAlign="center">No item</Text>
+      )}
     </VStack>
   );
 };

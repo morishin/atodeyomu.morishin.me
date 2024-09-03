@@ -8,8 +8,10 @@ type Page = ApiUserPageResponse[number];
 
 export default async function Page({
   params: { userName },
+  searchParams: { read },
 }: {
   params: { userName: string };
+  searchParams: { read: string };
 }) {
   const user = await prisma.user.findUniqueOrThrow({
     where: { name: userName },
@@ -20,7 +22,11 @@ export default async function Page({
   return (
     <VStack>
       <h1>{user.name}</h1>
-      <Content userName={user.name} isMyPage={isMyPage} />
+      <Content
+        userName={user.name}
+        isMyPage={isMyPage}
+        initialTab={Boolean(Number(read)) ? "read" : "unread"}
+      />
     </VStack>
   );
 }

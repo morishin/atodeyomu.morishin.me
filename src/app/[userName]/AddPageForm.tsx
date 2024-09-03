@@ -38,12 +38,13 @@ export function AddPageForm({
             name="url"
             fontSize="xl"
             placeholder="https://..."
+            required={true}
             disabled={!isAvailable || isPending}
           />
         </Field.Root>
         <Button type="submit" disabled={!isAvailable} loading={isPending}>
           <PlusIcon />
-          Add to Unreads
+          Add to Unread
         </Button>
       </HStack>
     </form>
