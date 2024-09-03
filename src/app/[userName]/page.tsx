@@ -20,10 +20,14 @@ export default async function Page({
   const isMyPage = session?.user?.id === user.id;
 
   return (
-    <VStack>
-      <h1>{user.name}</h1>
+    <VStack
+      alignItems="center"
+      paddingTop={{ smDown: "0", base: "4" }}
+      paddingBottom="12"
+    >
       <Content
         userName={user.name}
+        userIcon={user.image}
         isMyPage={isMyPage}
         initialTab={Boolean(Number(read)) ? "read" : "unread"}
       />

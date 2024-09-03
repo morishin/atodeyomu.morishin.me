@@ -11,6 +11,7 @@ export const PageList = ({
   size,
   setSize,
   isRead,
+  isMyPage,
   isLoading,
   showLoadMore,
   refresh,
@@ -19,6 +20,7 @@ export const PageList = ({
   "data" | "size" | "setSize"
 > & {
   isRead: boolean;
+  isMyPage: boolean;
   isLoading: boolean;
   showLoadMore: boolean;
   refresh: () => Promise<void>;
@@ -30,6 +32,7 @@ export const PageList = ({
           <PageListItem
             key={page.id}
             page={page}
+            isMyPage={isMyPage}
             isRead={isRead}
             refresh={refresh}
           />

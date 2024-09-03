@@ -5,10 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { PageList } from "@/app/[userName]/PageList";
-import { Tabs } from "@/components/park-ui";
-import { VStack } from "@styled-system/jsx";
+import { Tabs, Text } from "@/components/park-ui";
+import { HStack, VStack } from "@styled-system/jsx";
 import { AddPageForm } from "@/app/[userName]/AddPageForm";
 import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
+import { Avatar } from "@/components/park-ui/avatar";
 
 type Page = ApiUserPageResponse[number];
 
@@ -19,10 +20,12 @@ const fetcher: (url: string) => Promise<ApiUserPageResponse> = (url: string) =>
 
 export const Content = ({
   userName,
+  userIcon,
   isMyPage,
   initialTab,
 }: {
   userName: string;
+  userIcon: string | null;
   isMyPage: boolean;
   initialTab: "read" | "unread";
 }) => {
@@ -54,13 +57,23 @@ export const Content = ({
   const pathname = usePathname();
 
   const refresh = async () => {
-    await Promise.all([unreadData.mutate(), readData.mutate()]);
+    if (document.startViewTransition) {
+      document.startViewTransition(async () => {
+        await Promise.all([unreadData.mutate(), readData.mutate()]);
+      });
+    } else {
+      await Promise.all([unreadData.mutate(), readData.mutate()]);
+    }
   };
 
   return (
-    <VStack>
-      <AddPageForm isAvailable={isMyPage} refresh={refresh} />
-      <Tabs.Root defaultValue={initialTab} w="xl" maxW="100vw">
+    <VStack w="2xl" maxW="100vw" gap="6">
+      <HStack alignSelf="stretch" padding={{ smDown: "2", base: "0" }}>
+        <Avatar src={userIcon ?? undefined} name={userName} />
+        <Text fontSize="xl">{userName}</Text>
+      </HStack>
+      {isMyPage ? <AddPageForm refresh={refresh} /> : null}
+      <Tabs.Root defaultValue={initialTab}>
         <Tabs.List>
           <Link href={pathname}>
             <Tabs.Trigger key={"unread"} value={"unread"}>
@@ -79,6 +92,7 @@ export const Content = ({
             data={unreadData.data}
             size={unreadData.size}
             setSize={unreadData.setSize}
+            isMyPage={isMyPage}
             isRead={false}
             isLoading={unreadData.isLoading}
             showLoadMore={showLoadMoreUnread}
@@ -90,6 +104,7 @@ export const Content = ({
             data={readData.data}
             size={readData.size}
             setSize={readData.setSize}
+            isMyPage={isMyPage}
             isRead={true}
             isLoading={readData.isLoading}
             showLoadMore={showLoadMoreRead}
