@@ -39,6 +39,5 @@ export async function requestAddPage(
     },
   });
 
-  console.log("🔥", pageInfo);
   return { state: "success", timestamp: Date.now() };
 }

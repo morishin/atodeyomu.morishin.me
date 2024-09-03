@@ -53,9 +53,13 @@ export const Content = ({
 
   const pathname = usePathname();
 
+  const refresh = async () => {
+    await Promise.all([unreadData.mutate(), readData.mutate()]);
+  };
+
   return (
     <VStack>
-      <AddPageForm isAvailable={isMyPage} mutate={unreadData.mutate} />
+      <AddPageForm isAvailable={isMyPage} refresh={refresh} />
       <Tabs.Root defaultValue={initialTab} w="xl" maxW="100vw">
         <Tabs.List>
           <Link href={pathname}>
@@ -75,8 +79,10 @@ export const Content = ({
             data={unreadData.data}
             size={unreadData.size}
             setSize={unreadData.setSize}
+            isRead={false}
             isLoading={unreadData.isLoading}
             showLoadMore={showLoadMoreUnread}
+            refresh={refresh}
           />
         </Tabs.Content>
         <Tabs.Content value="read">
@@ -84,8 +90,10 @@ export const Content = ({
             data={readData.data}
             size={readData.size}
             setSize={readData.setSize}
+            isRead={true}
             isLoading={readData.isLoading}
             showLoadMore={showLoadMoreRead}
+            refresh={refresh}
           />
         </Tabs.Content>
       </Tabs.Root>

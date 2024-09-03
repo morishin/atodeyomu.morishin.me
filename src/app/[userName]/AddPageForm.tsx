@@ -1,19 +1,17 @@
 import { PlusIcon } from "lucide-react";
 import { useActionState, useEffect } from "react";
-import { SWRInfiniteResponse } from "swr/infinite";
 
 import { requestAddPage } from "@/app/[userName]/AddPageFormAction";
-import { ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
 import { Button } from "@/components/park-ui/button";
 import { Field } from "@/components/park-ui/field";
 import { HStack } from "@styled-system/jsx";
 
 export function AddPageForm({
   isAvailable,
-  mutate,
+  refresh,
 }: {
   isAvailable: boolean;
-  mutate: SWRInfiniteResponse<ApiUserPageResponse>["mutate"];
+  refresh: () => Promise<void>;
 }) {
   const [{ state, timestamp }, action, isPending] = useActionState(
     requestAddPage,
@@ -25,9 +23,9 @@ export function AddPageForm({
 
   useEffect(() => {
     if (state === "success") {
-      mutate();
+      refresh();
     }
-  }, [state, timestamp, mutate]);
+  }, [state, timestamp, refresh]);
 
   return (
     <form action={action}>
