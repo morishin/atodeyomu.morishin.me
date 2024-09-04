@@ -40,9 +40,14 @@ export async function GET(
       userId: user.id,
       readAt: isRead ? { not: null } : null,
     },
-    orderBy: {
-      createdAt: "desc",
-    },
+    orderBy: [
+      {
+        readAt: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
     skip: isNaN(page) ? 0 : (page - 1) * perPage,
     take: perPage,
   });

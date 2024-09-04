@@ -1,4 +1,5 @@
 import { SWRInfiniteResponse } from "swr/infinite";
+import { CreateToasterReturn } from "@ark-ui/react";
 
 import { ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
 import { Text } from "@/components/park-ui";
@@ -15,6 +16,7 @@ export const PageList = ({
   isLoading,
   showLoadMore,
   refresh,
+  toaster,
 }: Pick<
   SWRInfiniteResponse<ApiUserPageResponse>,
   "data" | "size" | "setSize"
@@ -24,6 +26,7 @@ export const PageList = ({
   isLoading: boolean;
   showLoadMore: boolean;
   refresh: () => Promise<void>;
+  toaster: CreateToasterReturn;
 }) => {
   return (
     <VStack alignItems="stretch">
@@ -35,6 +38,7 @@ export const PageList = ({
             isMyPage={isMyPage}
             isRead={isRead}
             refresh={refresh}
+            toaster={toaster}
           />
         ))
       )}

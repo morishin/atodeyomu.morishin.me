@@ -3,8 +3,14 @@
 import useSWRInfinite from "swr/infinite";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { GlobeIcon, LockIcon, XIcon } from "lucide-react";
-import { useActionState, useEffect } from "react";
+import {
+  CircleCheckIcon,
+  CircleXIcon,
+  GlobeIcon,
+  LockIcon,
+  XIcon,
+} from "lucide-react";
+import { useActionState, useCallback, useEffect } from "react";
 
 import { PageList } from "@/app/[userName]/PageList";
 import { Tabs, Text } from "@/components/park-ui";
@@ -16,6 +22,7 @@ import { Badge } from "@/components/park-ui/badge";
 import { Dialog } from "@/components/park-ui/dialog";
 import { Button } from "@/components/park-ui/button";
 import { requestChangeVisibility } from "@/app/[userName]/ChangeVisibilityFormAction";
+import { Toast } from "@/components/park-ui/toast";
 
 type Page = ApiUserPageResponse[number];
 
@@ -23,6 +30,12 @@ const perPage = 20;
 
 const fetcher: (url: string) => Promise<ApiUserPageResponse> = (url: string) =>
   fetch(url).then((r) => r.json());
+
+const toaster = Toast.createToaster({
+  placement: "bottom",
+  overlap: true,
+  gap: 16,
+});
 
 export const Content = ({
   userName,
@@ -64,7 +77,7 @@ export const Content = ({
 
   const pathname = usePathname();
 
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     if (document.startViewTransition) {
       document.startViewTransition(async () => {
         await Promise.all([unreadData.mutate(), readData.mutate()]);
@@ -72,7 +85,7 @@ export const Content = ({
     } else {
       await Promise.all([unreadData.mutate(), readData.mutate()]);
     }
-  };
+  }, [unreadData.mutate, readData.mutate]);
 
   const visibilityBadge = isPrivate ? (
     <Badge size="sm" variant="solid">
@@ -121,7 +134,7 @@ export const Content = ({
             )}
           </HStack>
         </HStack>
-        {isMyPage ? <AddPageForm refresh={refresh} /> : null}
+        {isMyPage ? <AddPageForm refresh={refresh} toaster={toaster} /> : null}
         <Tabs.Root defaultValue={initialTab}>
           <Tabs.List>
             <Link href={pathname}>
@@ -146,6 +159,7 @@ export const Content = ({
               isLoading={unreadData.isLoading}
               showLoadMore={showLoadMoreUnread}
               refresh={refresh}
+              toaster={toaster}
             />
           </Tabs.Content>
           <Tabs.Content value="read">
@@ -158,10 +172,37 @@ export const Content = ({
               isLoading={readData.isLoading}
               showLoadMore={showLoadMoreRead}
               refresh={refresh}
+              toaster={toaster}
             />
           </Tabs.Content>
         </Tabs.Root>
       </VStack>
+      <Toast.Toaster toaster={toaster}>
+        {(toast) => (
+          <Toast.Root
+            key={toast.id}
+            bgColor={
+              toast.type === "error"
+                ? "red"
+                : toast.type === "success"
+                  ? "green"
+                  : undefined
+            }
+            color="white"
+          >
+            <HStack alignItems="center">
+              {toast.type === "error" ? <CircleXIcon /> : null}
+              {toast.type === "success" ? <CircleCheckIcon /> : null}
+              <Toast.Title color="white">{toast.title}</Toast.Title>
+            </HStack>
+            <Toast.CloseTrigger asChild>
+              <Button size="sm" variant="link">
+                <XIcon />
+              </Button>
+            </Toast.CloseTrigger>
+          </Toast.Root>
+        )}
+      </Toast.Toaster>
       <Dialog.Backdrop />
       <Dialog.Positioner>
         <Dialog.Content>

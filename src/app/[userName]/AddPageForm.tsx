@@ -5,8 +5,15 @@ import { requestAddPage } from "@/app/[userName]/AddPageFormAction";
 import { Button } from "@/components/park-ui/button";
 import { Field } from "@/components/park-ui/field";
 import { HStack, Box } from "@styled-system/jsx";
+import { CreateToasterReturn } from "@ark-ui/react";
 
-export function AddPageForm({ refresh }: { refresh: () => Promise<void> }) {
+export function AddPageForm({
+  refresh,
+  toaster,
+}: {
+  refresh: () => Promise<void>;
+  toaster: CreateToasterReturn;
+}) {
   const [{ state, timestamp }, action, isPending] = useActionState(
     requestAddPage,
     {
@@ -18,8 +25,12 @@ export function AddPageForm({ refresh }: { refresh: () => Promise<void> }) {
   useEffect(() => {
     if (state === "success") {
       refresh();
+      toaster.create({
+        title: "Added to unread",
+        type: "success",
+      });
     }
-  }, [state, timestamp, refresh]);
+  }, [state, refresh, timestamp]);
 
   return (
     <Box width="100%" padding={{ smDown: "2", base: "0" }}>

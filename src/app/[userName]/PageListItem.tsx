@@ -1,10 +1,11 @@
-import { useActionState, useEffect } from "react";
-import { CheckIcon, UndoIcon, XIcon } from "lucide-react";
+import { type MouseEventHandler, useActionState, useEffect } from "react";
+import { CheckIcon, CopyIcon, UndoIcon, XIcon } from "lucide-react";
+import { CreateToasterReturn } from "@ark-ui/react";
 
 import { Button } from "@/components/park-ui/button";
 import { HStack, VStack, Box } from "@styled-system/jsx";
 import { Text } from "@/components/park-ui";
-import { ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
+import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
 import { requestReadPage } from "@/app/[userName]/ReadPageFormAction";
 import { requestDeletePage } from "@/app/[userName]/DeletePageFormAction";
 
@@ -13,19 +14,22 @@ export const PageListItem = ({
   isRead,
   isMyPage,
   refresh,
+  toaster,
 }: {
   page: ApiUserPageResponse[number];
   isRead: boolean;
   isMyPage: boolean;
   refresh: () => Promise<void>;
+  toaster: CreateToasterReturn;
 }) => {
-  const [{ state: readState }, readAction, isReadPending] = useActionState(
-    requestReadPage,
-    {
-      state: "idle",
-      timestamp: Date.now(),
-    } as const
-  );
+  const [
+    { state: readState, timestamp: readTimestamp },
+    readAction,
+    isReadPending,
+  ] = useActionState(requestReadPage, {
+    state: "idle",
+    timestamp: Date.now(),
+  } as const);
 
   const [{ state: deleteState }, deleteAction, isDeletePending] =
     useActionState(requestDeletePage, {
@@ -36,14 +40,35 @@ export const PageListItem = ({
   useEffect(() => {
     if (readState === "success") {
       refresh();
+      toaster.create({
+        title: isRead ? "Marked as unread" : "Marked as read",
+        type: "success",
+      });
     }
-  }, [readState, refresh]);
+  }, [readState, refresh, readTimestamp]);
 
   useEffect(() => {
     if (deleteState === "success") {
       refresh();
     }
   }, [deleteState, refresh]);
+
+  const onClickCopy: MouseEventHandler<HTMLButtonElement> = async (e) => {
+    e.preventDefault();
+    try {
+      await navigator.clipboard.writeText(page.url);
+    } catch {
+      toaster.create({
+        title: "Failed to copy the page URL.",
+        type: "error",
+      });
+      return;
+    }
+    toaster.create({
+      title: "Copied the page URL.",
+      type: "success",
+    });
+  };
 
   return (
     <a key={page.id} href={page.url}>
@@ -101,6 +126,9 @@ export const PageListItem = ({
             {page.description}
           </Text>
         </VStack>
+        <Button variant="subtle" size="sm" onClick={onClickCopy}>
+          <CopyIcon />
+        </Button>
         {isMyPage ? (
           <form action={readAction}>
             <input type="hidden" name="pageId" value={page.id} />
@@ -122,7 +150,9 @@ export const PageListItem = ({
           <form
             action={deleteAction}
             onSubmit={(e) => {
-              if (!confirm("Are you sure?")) {
+              if (
+                !confirm(`Are you sure to delete this page?\n"${page.title}"`)
+              ) {
                 e.preventDefault();
               }
             }}
