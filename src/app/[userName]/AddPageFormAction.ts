@@ -29,13 +29,26 @@ export async function requestAddPage(
     return { state: "error", timestamp: Date.now() };
   }
 
-  await prisma.page.create({
-    data: {
+  await prisma.page.upsert({
+    where: {
+      userId_url: {
+        userId: session.user.id,
+        url,
+      },
+    },
+    create: {
       userId: session.user.id,
       url,
       title: pageInfo.title,
       description: pageInfo.description ?? "",
       image: pageInfo.image,
+    },
+    update: {
+      title: pageInfo.title,
+      description: pageInfo.description ?? "",
+      image: pageInfo.image,
+      createdAt: new Date().toISOString(),
+      readAt: null,
     },
   });
 

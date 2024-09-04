@@ -2,6 +2,7 @@ import { type NextRequest } from "next/server";
 
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
+import { notFound } from "next/navigation";
 
 export type ApiUserPageResponse = {
   id: string;
@@ -24,7 +25,7 @@ export async function GET(
   if (user.private) {
     const session = await auth();
     if (session?.user?.id !== user.id) {
-      return new Response("Not Found", { status: 404 });
+      notFound();
     }
   }
 

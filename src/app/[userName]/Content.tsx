@@ -5,12 +5,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   CircleCheckIcon,
+  CircleEllipsisIcon,
   CircleXIcon,
+  EllipsisIcon,
   GlobeIcon,
   LockIcon,
+  RssIcon,
   XIcon,
 } from "lucide-react";
-import { useActionState, useCallback, useEffect } from "react";
+import { useActionState, useCallback, useEffect, useState } from "react";
 
 import { PageList } from "@/app/[userName]/PageList";
 import { Tabs, Text } from "@/components/park-ui";
@@ -23,6 +26,8 @@ import { Dialog } from "@/components/park-ui/dialog";
 import { Button } from "@/components/park-ui/button";
 import { requestChangeVisibility } from "@/app/[userName]/ChangeVisibilityFormAction";
 import { Toast } from "@/components/park-ui/toast";
+import { ChangeVisibilityDialog } from "@/app/[userName]/ChangeVisibilityDialog";
+import { RssDialog } from "@/app/[userName]/RssDialog";
 
 type Page = ApiUserPageResponse[number];
 
@@ -87,6 +92,10 @@ export const Content = ({
     }
   }, [unreadData.mutate, readData.mutate]);
 
+  const [dialogType, setDialogType] = useState<
+    "changeVisibility" | "rss" | null
+  >(null);
+
   const visibilityBadge = isPrivate ? (
     <Badge size="sm" variant="solid">
       <LockIcon />
@@ -115,68 +124,84 @@ export const Content = ({
   }, [changeVisibilityState]);
 
   return (
-    <Dialog.Root lazyMount={true}>
-      <VStack w="2xl" maxW="100vw" gap="6">
-        <HStack
-          alignSelf="stretch"
-          justifyContent="space-between"
-          padding={{ smDown: "2", base: "0" }}
-        >
+    <VStack w="2xl" maxW="100vw" gap="6">
+      <HStack
+        alignSelf="stretch"
+        justifyContent="space-between"
+        padding={{ smDown: "2", base: "0" }}
+      >
+        <HStack alignItems="center">
           <HStack alignItems="center">
             <Avatar src={userIcon ?? undefined} name={userName} />
             <Text fontSize="xl">{userName}</Text>
+          </HStack>
+          <HStack alignItems="center" gap="1">
             {isMyPage ? (
-              <Dialog.Trigger cursor="pointer" asChild>
+              <ChangeVisibilityDialog
+                changeVisibilityAction={changeVisibilityAction}
+                isPrivate={isPrivate}
+                isChangeVisibilityPending={isChangeVisibilityPending}
+              >
                 {visibilityBadge}
-              </Dialog.Trigger>
+              </ChangeVisibilityDialog>
             ) : (
               visibilityBadge
             )}
+            {!isPrivate ? (
+              <RssDialog>
+                <Button size="xs" variant="ghost">
+                  <RssIcon />
+                </Button>
+              </RssDialog>
+            ) : null}
           </HStack>
         </HStack>
-        {isMyPage ? <AddPageForm refresh={refresh} toaster={toaster} /> : null}
-        <Tabs.Root defaultValue={initialTab}>
-          <Tabs.List>
-            <Link href={pathname}>
-              <Tabs.Trigger key={"unread"} value={"unread"}>
-                Unread
-              </Tabs.Trigger>
-            </Link>
-            <Link href="?read=1">
-              <Tabs.Trigger key={"read"} value={"read"}>
-                Read
-              </Tabs.Trigger>
-            </Link>
-            <Tabs.Indicator />
-          </Tabs.List>
-          <Tabs.Content value="unread">
-            <PageList
-              data={unreadData.data}
-              size={unreadData.size}
-              setSize={unreadData.setSize}
-              isMyPage={isMyPage}
-              isRead={false}
-              isLoading={unreadData.isLoading}
-              showLoadMore={showLoadMoreUnread}
-              refresh={refresh}
-              toaster={toaster}
-            />
-          </Tabs.Content>
-          <Tabs.Content value="read">
-            <PageList
-              data={readData.data}
-              size={readData.size}
-              setSize={readData.setSize}
-              isMyPage={isMyPage}
-              isRead={true}
-              isLoading={readData.isLoading}
-              showLoadMore={showLoadMoreRead}
-              refresh={refresh}
-              toaster={toaster}
-            />
-          </Tabs.Content>
-        </Tabs.Root>
-      </VStack>
+        <Button size="md" variant="ghost">
+          <EllipsisIcon />
+        </Button>
+      </HStack>
+      {isMyPage ? <AddPageForm refresh={refresh} toaster={toaster} /> : null}
+      <Tabs.Root defaultValue={initialTab}>
+        <Tabs.List>
+          <Link href={pathname}>
+            <Tabs.Trigger key={"unread"} value={"unread"}>
+              Unread
+            </Tabs.Trigger>
+          </Link>
+          <Link href="?read=1">
+            <Tabs.Trigger key={"read"} value={"read"}>
+              Read
+            </Tabs.Trigger>
+          </Link>
+          <Tabs.Indicator />
+        </Tabs.List>
+        <Tabs.Content value="unread">
+          <PageList
+            data={unreadData.data}
+            size={unreadData.size}
+            setSize={unreadData.setSize}
+            isMyPage={isMyPage}
+            isRead={false}
+            isLoading={unreadData.isLoading}
+            showLoadMore={showLoadMoreUnread}
+            refresh={refresh}
+            toaster={toaster}
+          />
+        </Tabs.Content>
+        <Tabs.Content value="read">
+          <PageList
+            data={readData.data}
+            size={readData.size}
+            setSize={readData.setSize}
+            isMyPage={isMyPage}
+            isRead={true}
+            isLoading={readData.isLoading}
+            showLoadMore={showLoadMoreRead}
+            refresh={refresh}
+            toaster={toaster}
+          />
+        </Tabs.Content>
+      </Tabs.Root>
       <Toast.Toaster toaster={toaster}>
         {(toast) => (
           <Toast.Root
@@ -203,38 +228,6 @@ export const Content = ({
           </Toast.Root>
         )}
       </Toast.Toaster>
-      <Dialog.Backdrop />
-      <Dialog.Positioner>
-        <Dialog.Content>
-          <form action={changeVisibilityAction}>
-            <input type="hidden" name="private" value={isPrivate ? "0" : "1"} />
-            <Stack gap="8" p="6">
-              <Stack gap="1">
-                <Dialog.Title>Change visibility</Dialog.Title>
-                <Dialog.Description>
-                  {`This page is currently ${isPrivate ? "private" : "public"}.`}
-                </Dialog.Description>
-              </Stack>
-              <Stack gap="3" direction="row" width="full">
-                <Dialog.CloseTrigger asChild>
-                  <Button variant="outline" width="full">
-                    Cancel
-                  </Button>
-                </Dialog.CloseTrigger>
-                <Button
-                  width="full"
-                  loading={isChangeVisibilityPending}
-                >{`Make ${isPrivate ? "public" : "private"}`}</Button>
-              </Stack>
-            </Stack>
-            <Dialog.CloseTrigger asChild position="absolute" top="2" right="2">
-              <Button aria-label="Close Dialog" variant="ghost" size="sm">
-                <XIcon />
-              </Button>
-            </Dialog.CloseTrigger>
-          </form>
-        </Dialog.Content>
-      </Dialog.Positioner>
-    </Dialog.Root>
+    </VStack>
   );
 };

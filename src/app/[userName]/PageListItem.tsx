@@ -1,4 +1,4 @@
-import { type MouseEventHandler, useActionState, useEffect } from "react";
+import { useActionState, useEffect } from "react";
 import { CheckIcon, CopyIcon, UndoIcon, XIcon } from "lucide-react";
 import { CreateToasterReturn } from "@ark-ui/react";
 
@@ -8,6 +8,7 @@ import { Text } from "@/components/park-ui";
 import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
 import { requestReadPage } from "@/app/[userName]/ReadPageFormAction";
 import { requestDeletePage } from "@/app/[userName]/DeletePageFormAction";
+import { Clipboard } from "@/components/park-ui/clipboard";
 
 export const PageListItem = ({
   page,
@@ -52,23 +53,6 @@ export const PageListItem = ({
       refresh();
     }
   }, [deleteState, refresh]);
-
-  const onClickCopy: MouseEventHandler<HTMLButtonElement> = async (e) => {
-    e.preventDefault();
-    try {
-      await navigator.clipboard.writeText(page.url);
-    } catch {
-      toaster.create({
-        title: "Failed to copy the page URL.",
-        type: "error",
-      });
-      return;
-    }
-    toaster.create({
-      title: "Copied the page URL.",
-      type: "success",
-    });
-  };
 
   return (
     <a key={page.id} href={page.url}>
@@ -126,9 +110,21 @@ export const PageListItem = ({
             {page.description}
           </Text>
         </VStack>
-        <Button variant="subtle" size="sm" onClick={onClickCopy}>
-          <CopyIcon />
-        </Button>
+        <Clipboard.Root value={page.url}>
+          <Clipboard.Control>
+            <Clipboard.Trigger asChild>
+              <Button
+                variant="subtle"
+                size="sm"
+                onClick={(e) => e.preventDefault()}
+              >
+                <Clipboard.Indicator copied={<CheckIcon />}>
+                  <CopyIcon />
+                </Clipboard.Indicator>
+              </Button>
+            </Clipboard.Trigger>
+          </Clipboard.Control>
+        </Clipboard.Root>
         {isMyPage ? (
           <form action={readAction}>
             <input type="hidden" name="pageId" value={page.id} />

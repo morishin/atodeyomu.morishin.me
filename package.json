@@ -24,6 +24,7 @@
     "next-auth": "5.0.0-beta.18",
     "react": "19.0.0-rc.0",
     "react-dom": "19.0.0-rc.0",
+    "rss": "^1.2.2",
     "swr": "^2.2.5"
   },
   "devDependencies": {
@@ -33,6 +34,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/rss": "^0.0.32",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
     "eslint": "^8",
     "eslint-config-next": "15.0.0-canary.49",
