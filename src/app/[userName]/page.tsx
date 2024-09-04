@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 import { Content } from "@/app/[userName]/Content";
 import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
 import { auth } from "@/lib/auth/auth";
@@ -18,6 +20,11 @@ export default async function Page({
   });
   const session = await auth();
   const isMyPage = session?.user?.id === user.id;
+  const isPrivate = user.private;
+
+  if (isPrivate && !isMyPage) {
+    notFound();
+  }
 
   return (
     <VStack
@@ -28,6 +35,7 @@ export default async function Page({
       <Content
         userName={user.name}
         userIcon={user.image}
+        isPrivate={isPrivate}
         isMyPage={isMyPage}
         initialTab={Boolean(Number(read)) ? "read" : "unread"}
       />
