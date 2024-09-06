@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Text } from "@/components/park-ui";
 import { auth } from "@/lib/auth/auth";
 import { redirectToWelcomePageIfNeeded } from "@/lib/redirects";
-import { VStack, Box } from "@styled-system/jsx";
+import { VStack } from "@styled-system/jsx";
 import { Button } from "@/components/park-ui/button";
 import { Card } from "@/components/park-ui/card";
 

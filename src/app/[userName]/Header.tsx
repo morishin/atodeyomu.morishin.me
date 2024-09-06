@@ -1,4 +1,12 @@
-import { RssIcon, EllipsisIcon, GlobeIcon, LockIcon } from "lucide-react";
+import {
+  RssIcon,
+  EllipsisIcon,
+  GlobeIcon,
+  LockIcon,
+  SettingsIcon,
+  LogOutIcon,
+  ChevronsLeftRightEllipsisIcon,
+} from "lucide-react";
 import { useActionState, useEffect } from "react";
 
 import { ChangeVisibilityDialog } from "@/app/[userName]/ChangeVisibilityDialog";
@@ -9,6 +17,7 @@ import { Avatar } from "@/components/park-ui/avatar";
 import { HStack } from "@styled-system/jsx";
 import { Text } from "@/components/park-ui";
 import { Badge } from "@/components/park-ui/badge";
+import { Menu } from "@/components/park-ui/menu";
 
 export const Header = ({
   userName,
@@ -80,9 +89,38 @@ export const Header = ({
           ) : null}
         </HStack>
       </HStack>
-      <Button size="md" variant="ghost">
-        <EllipsisIcon />
-      </Button>
+      <Menu.Root>
+        <Menu.Trigger asChild>
+          <Button size="md" variant="ghost">
+            <EllipsisIcon />
+          </Button>
+        </Menu.Trigger>
+        <Menu.Positioner>
+          <Menu.Content>
+            <Menu.ItemGroup>
+              <Menu.Item value="settings">
+                <HStack gap="2">
+                  <SettingsIcon /> Settings
+                </HStack>
+              </Menu.Item>
+              <Menu.Item value="api">
+                <HStack gap="2">
+                  <ChevronsLeftRightEllipsisIcon /> API
+                </HStack>
+              </Menu.Item>
+              <Menu.Separator />
+              <a href="/api/auth/signout">
+                <Menu.Item value="logout">
+                  <HStack gap="2">
+                    <LogOutIcon />
+                    Logout
+                  </HStack>
+                </Menu.Item>
+              </a>
+            </Menu.ItemGroup>
+          </Menu.Content>
+        </Menu.Positioner>
+      </Menu.Root>
     </HStack>
   );
 };
