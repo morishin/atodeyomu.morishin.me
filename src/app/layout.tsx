@@ -6,8 +6,8 @@ import { auth } from "@/lib/auth/auth";
 import { VStack } from "@styled-system/jsx";
 
 export const metadata: Metadata = {
-  title: "atodeyomu",
-  description: "Your reading list",
+  title: "ato de yomu",
+  description: "Reading List",
 };
 
 export default async function RootLayout({

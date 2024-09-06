@@ -1,6 +1,7 @@
 import { useActionState, useEffect } from "react";
 import { CheckIcon, CopyIcon, UndoIcon, XIcon } from "lucide-react";
 import { CreateToasterReturn } from "@ark-ui/react";
+import Image from "next/image";
 
 import { Button } from "@/components/park-ui/button";
 import { HStack, VStack, Box } from "@styled-system/jsx";
@@ -74,8 +75,7 @@ export const PageListItem = ({
           overflow="hidden"
         >
           {page.image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               alt=""
               src={page.image}
               width="64"

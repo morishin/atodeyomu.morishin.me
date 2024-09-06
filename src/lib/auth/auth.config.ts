@@ -2,8 +2,8 @@ import { randomBytes } from "crypto";
 
 import { init } from "@paralleldrive/cuid2";
 import type { NextAuthConfig, Session } from "next-auth";
-import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
+import { User } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 
@@ -36,30 +36,17 @@ export default {
         };
       },
     }),
-    GitHub({
-      clientId: process.env.AUTH_PROVIDER_GITHUB_CLIENT_ID,
-      clientSecret: process.env.AUTH_PROVIDER_GITHUB_CLIENT_SECRET,
-      profile: async (profile) => {
-        const name = await generateUniqueName(profile.login);
-        const personalAccessToken = randomBytes(20).toString("hex");
-        return {
-          id: profile.id.toString(),
-          name,
-          image: profile.avatar_url,
-          email: profile.email,
-          personalAccessToken,
-        };
-      },
-    }),
   ],
   callbacks: {
     async session({ session, user }) {
-      // Drop unused fields from the original session (like email)
+      const appUser = user as User;
       const newSession = {
         user: {
-          id: user.id,
-          name: user.name ?? "",
-          image: user.image,
+          id: appUser.id,
+          name: appUser.name ?? "",
+          image: appUser.image,
+          private: appUser.private,
+          registerCompleted: appUser.registerCompleted,
         },
         expires: session.expires,
       } satisfies Session;

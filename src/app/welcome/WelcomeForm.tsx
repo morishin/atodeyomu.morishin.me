@@ -45,15 +45,15 @@ export const WelcomeForm = ({ currentName }: { currentName: string }) => {
       paddingBottom="12"
       gap="7"
     >
-      <Text as="h1" fontSize="xl">
+      <Text as="h1" fontSize="2xl">
         Welcome
       </Text>
-      <VStack gap="4">
-        <Text fontSize="md">Choose your name</Text>
-        <HStack padding="4" borderRadius="xl" bgColor="gray.3">
-          <Text fontSize="md">atodeyomu.morishin.me</Text>
-          <Text fontSize="md">/</Text>
-          <form action={action}>
+      <form action={action}>
+        <VStack gap="4">
+          <Text fontSize="md">Choose your name</Text>
+          <HStack padding="4" borderRadius="xl" bgColor="gray.3">
+            <Text fontSize="md">atodeyomu.morishin.me</Text>
+            <Text fontSize="md">/</Text>
             <Field.Root flex="1">
               <Field.Input
                 type="text"
@@ -65,13 +65,13 @@ export const WelcomeForm = ({ currentName }: { currentName: string }) => {
                 bgColor="white"
               />
             </Field.Root>
-          </form>
-        </HStack>
-        <Button type="submit" disabled={isPending} loading={isPending}>
-          Get Started
-          <ArrowRightIcon />
-        </Button>
-      </VStack>
+          </HStack>
+          <Button type="submit" disabled={isPending} loading={isPending}>
+            Get Started
+            <ArrowRightIcon />
+          </Button>
+        </VStack>
+      </form>
       <DeleteUserForm />
       <Toast.Toaster toaster={toaster}>
         {(toast) => (

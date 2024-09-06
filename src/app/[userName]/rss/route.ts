@@ -1,7 +1,8 @@
-import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { type NextRequest } from "next/server";
 import RSS from "rss";
+
+import { prisma } from "@/lib/prisma";
 
 export async function GET(
   request: NextRequest,
@@ -24,7 +25,7 @@ export async function GET(
   }
 
   const feed = new RSS({
-    title: `${user.name}'s ${isRead ? "reads" : "unreads"} | atodeyomu`,
+    title: `${user.name}'s ${isRead ? "reads" : "unreads"} | ato de yomu`,
     site_url: `${request.nextUrl.protocol}//${request.nextUrl.host}`,
     feed_url: request.nextUrl.href,
   });
