@@ -5,6 +5,7 @@ import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 import { VStack } from "@styled-system/jsx";
+import { redirectToWelcomePageIfNeeded } from "@/lib/redirects";
 
 type Page = ApiUserPageResponse[number];
 
@@ -19,6 +20,8 @@ export default async function Page({
     where: { name: userName },
   });
   const session = await auth();
+  await redirectToWelcomePageIfNeeded(session);
+
   const isMyPage = session?.user?.id === user.id;
   const isPrivate = user.private;
 
@@ -28,7 +31,7 @@ export default async function Page({
 
   return (
     <VStack
-      alignItems="center"
+      alignItems="stretch"
       paddingTop={{ smDown: "0", base: "4" }}
       paddingBottom="12"
     >

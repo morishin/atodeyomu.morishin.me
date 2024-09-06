@@ -7,10 +7,11 @@ import { Input } from "@/components/park-ui/styled/clipboard";
 import { FormLabel } from "@/components/park-ui/form-label";
 
 export const RssDialog = ({ children }: { children: JSX.Element }) => {
-  const url = new URL(
-    `${location.pathname.replace(/\/$/, "")}/rss`,
-    location.href
-  ).href;
+  const url =
+    typeof location === "object"
+      ? new URL(`${location.pathname.replace(/\/$/, "")}/rss`, location.href)
+          .href
+      : "";
   return (
     <Dialog.Root lazyMount={true}>
       <Dialog.Trigger cursor="pointer" asChild>

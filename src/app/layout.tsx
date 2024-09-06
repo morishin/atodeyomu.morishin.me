@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 import ClientSessionProvider from "@/components/ClientSessionProvider";
 import { auth } from "@/lib/auth/auth";
+import { VStack } from "@styled-system/jsx";
 
 export const metadata: Metadata = {
   title: "atodeyomu",
@@ -19,7 +20,11 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <ClientSessionProvider session={session}>
-          {children}
+          <VStack alignItems="center">
+            <VStack w="2xl" maxW="100vw" alignItems="stretch">
+              {children}
+            </VStack>
+          </VStack>
         </ClientSessionProvider>
       </body>
     </html>
