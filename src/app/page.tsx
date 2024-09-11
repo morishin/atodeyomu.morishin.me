@@ -38,7 +38,7 @@ export default async function Home() {
         read later. You can choose to keep your list private or share it with
         others.
       </Text>
-      <Card.Root maxWidth="625px">
+      <Card.Root maxWidth="625px" marginTop="8">
         <Image
           width="1250"
           height="1181"

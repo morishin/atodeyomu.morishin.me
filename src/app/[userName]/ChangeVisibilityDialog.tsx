@@ -1,15 +1,15 @@
+import { GlobeIcon, LockIcon, XIcon } from "lucide-react";
+
 import { Button } from "@/components/park-ui/button";
 import { Dialog } from "@/components/park-ui/dialog";
 import { Stack } from "@styled-system/jsx";
-import { XIcon } from "lucide-react";
+import { Badge } from "@/components/park-ui/badge";
 
 export const ChangeVisibilityDialog = ({
-  children,
   changeVisibilityAction,
   isPrivate,
   isChangeVisibilityPending,
 }: {
-  children: JSX.Element;
   changeVisibilityAction: (payload: FormData) => void;
   isPrivate: boolean;
   isChangeVisibilityPending: boolean;
@@ -17,7 +17,17 @@ export const ChangeVisibilityDialog = ({
   return (
     <Dialog.Root lazyMount={true}>
       <Dialog.Trigger cursor="pointer" asChild>
-        {children}
+        {isPrivate ? (
+          <Badge size="sm" variant="solid">
+            <LockIcon />
+            Private
+          </Badge>
+        ) : (
+          <Badge size="sm" variant="outline">
+            <GlobeIcon />
+            Public
+          </Badge>
+        )}
       </Dialog.Trigger>
       <Dialog.Backdrop />
       <Dialog.Positioner>

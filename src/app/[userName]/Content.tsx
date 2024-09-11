@@ -32,11 +32,13 @@ export const Content = ({
   userName,
   userIcon,
   isMyPage,
+  loggedInUser,
   isPrivate,
   initialTab,
 }: {
   userName: string;
   userIcon: string | null;
+  loggedInUser: { name: string; image: string | null } | null;
   isMyPage: boolean;
   isPrivate: boolean;
   initialTab: "read" | "unread";
@@ -84,6 +86,7 @@ export const Content = ({
         userName={userName}
         userIcon={userIcon}
         isMyPage={isMyPage}
+        loggedInUser={loggedInUser}
         isPrivate={isPrivate}
       />
       {isMyPage ? <AddPageForm refresh={refresh} toaster={toaster} /> : null}

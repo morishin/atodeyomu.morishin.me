@@ -1,11 +1,11 @@
 import {
   RssIcon,
   EllipsisIcon,
-  GlobeIcon,
-  LockIcon,
   SettingsIcon,
   LogOutIcon,
   ChevronsLeftRightEllipsisIcon,
+  LogInIcon,
+  HomeIcon,
 } from "lucide-react";
 import { useActionState, useEffect } from "react";
 
@@ -16,18 +16,19 @@ import { Button } from "@/components/park-ui/button";
 import { Avatar } from "@/components/park-ui/avatar";
 import { HStack } from "@styled-system/jsx";
 import { Text } from "@/components/park-ui";
-import { Badge } from "@/components/park-ui/badge";
 import { Menu } from "@/components/park-ui/menu";
 
 export const Header = ({
   userName,
   userIcon,
   isMyPage,
+  loggedInUser,
   isPrivate,
 }: {
   userName: string;
   userIcon: string | null;
   isMyPage: boolean;
+  loggedInUser: { name: string; image: string | null } | null;
   isPrivate: boolean;
 }) => {
   const [
@@ -44,18 +45,6 @@ export const Header = ({
       location.reload();
     }
   }, [changeVisibilityState]);
-
-  const visibilityBadge = isPrivate ? (
-    <Badge size="sm" variant="solid">
-      <LockIcon />
-      Private
-    </Badge>
-  ) : (
-    <Badge size="sm" variant="outline">
-      <GlobeIcon />
-      Public
-    </Badge>
-  );
 
   return (
     <HStack
@@ -74,12 +63,8 @@ export const Header = ({
               changeVisibilityAction={changeVisibilityAction}
               isPrivate={isPrivate}
               isChangeVisibilityPending={isChangeVisibilityPending}
-            >
-              {visibilityBadge}
-            </ChangeVisibilityDialog>
-          ) : (
-            visibilityBadge
-          )}
+            />
+          ) : null}
           {!isPrivate ? (
             <RssDialog>
               <Button size="xs" variant="ghost">
@@ -98,25 +83,66 @@ export const Header = ({
         <Menu.Positioner>
           <Menu.Content>
             <Menu.ItemGroup>
-              <Menu.Item value="settings">
-                <HStack gap="2">
-                  <SettingsIcon /> Settings
-                </HStack>
-              </Menu.Item>
-              <Menu.Item value="api">
-                <HStack gap="2">
-                  <ChevronsLeftRightEllipsisIcon /> API
-                </HStack>
-              </Menu.Item>
-              <Menu.Separator />
-              <a href="/api/auth/signout">
-                <Menu.Item value="logout">
-                  <HStack gap="2">
-                    <LogOutIcon />
-                    Logout
-                  </HStack>
-                </Menu.Item>
-              </a>
+              {loggedInUser ? (
+                <>
+                  {!isMyPage ? (
+                    <a href="/">
+                      <Menu.Item value="home">
+                        <HStack gap="2">
+                          <Avatar
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-expect-error
+                            size="dummy"
+                            height="20px"
+                            width="20px"
+                            src={loggedInUser?.image ?? undefined}
+                            name={loggedInUser?.name}
+                          />{" "}
+                          Home
+                        </HStack>
+                      </Menu.Item>
+                    </a>
+                  ) : null}
+                  <Menu.Item value="settings">
+                    <HStack gap="2">
+                      <SettingsIcon /> Settings
+                    </HStack>
+                  </Menu.Item>
+                  <Menu.Item value="api">
+                    <HStack gap="2">
+                      <ChevronsLeftRightEllipsisIcon /> API
+                    </HStack>
+                  </Menu.Item>
+                  <Menu.Separator />
+                  <a href="/api/auth/signout">
+                    <Menu.Item value="logout">
+                      <HStack gap="2">
+                        <LogOutIcon />
+                        Logout
+                      </HStack>
+                    </Menu.Item>
+                  </a>
+                </>
+              ) : (
+                <>
+                  <a href="/">
+                    <Menu.Item value="home">
+                      <HStack gap="2">
+                        <HomeIcon />
+                        Home
+                      </HStack>
+                    </Menu.Item>
+                  </a>
+                  <a href="/api/auth/signin">
+                    <Menu.Item value="login">
+                      <HStack gap="2">
+                        <LogInIcon />
+                        Login
+                      </HStack>
+                    </Menu.Item>
+                  </a>
+                </>
+              )}
             </Menu.ItemGroup>
           </Menu.Content>
         </Menu.Positioner>

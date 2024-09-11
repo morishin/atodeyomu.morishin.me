@@ -38,6 +38,14 @@ export default async function Page({
       <Content
         userName={user.name}
         userIcon={user.image}
+        loggedInUser={
+          session?.user
+            ? {
+                name: session.user.name ?? "",
+                image: session.user.image ?? null,
+              }
+            : null
+        }
         isPrivate={isPrivate}
         isMyPage={isMyPage}
         initialTab={Boolean(Number(read)) ? "read" : "unread"}
