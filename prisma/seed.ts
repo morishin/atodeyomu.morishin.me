@@ -9,6 +9,7 @@ async function main() {
     create: {
       email: "alice@prisma.io",
       name: "alice",
+      personalAccessToken: "DUMMY",
       pages: {
         createMany: {
           data: Array.from({ length: 200 }).map((_, i) => ({
