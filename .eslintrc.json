@@ -9,5 +9,9 @@
         "newlines-between": "always"
       }
     ]
-  }
+  },
+  "ignorePatterns": [
+    "src/components/park-ui/**/*",
+    "src/lib/create-style-context.tsx"
+  ]
 }

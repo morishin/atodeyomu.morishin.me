@@ -47,7 +47,7 @@ export const PageListItem = ({
         type: "success",
       });
     }
-  }, [readState, refresh, readTimestamp]);
+  }, [readState, refresh, readTimestamp, toaster, isRead]);
 
   useEffect(() => {
     if (deleteState === "success") {

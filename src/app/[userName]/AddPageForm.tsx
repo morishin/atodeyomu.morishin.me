@@ -30,7 +30,7 @@ export function AddPageForm({
         type: "success",
       });
     }
-  }, [state, refresh, timestamp]);
+  }, [state, refresh, timestamp, toaster]);
 
   return (
     <Box width="100%" padding={{ smDown: "2", base: "0" }}>

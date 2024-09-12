@@ -17,6 +17,7 @@
     "@auth/prisma-adapter": "^2.4.1",
     "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^5.16.1",
+    "@vercel/blob": "^0.23.4",
     "babel-plugin-react-compiler": "^0.0.0-experimental-696af53-20240625",
     "happy-dom": "^15.0.0",
     "lucide-react": "^0.427.0",

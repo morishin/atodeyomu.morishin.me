@@ -19,6 +19,7 @@ import { Text } from "@/components/park-ui";
 import { Menu } from "@/components/park-ui/menu";
 import { ApiUsageDialog } from "@/app/[userName]/ApiUsageDialog";
 import { LoggedInUser } from "@/lib/types";
+import { ProfileSettingsDialog } from "@/app/[userName]/ProfileSettingsDialog";
 
 export const Header = ({
   userName,
@@ -43,6 +44,8 @@ export const Header = ({
   } as const);
 
   const [isOpenApiUsageDialog, setIsOpenApiUsageDialog] = useState(false);
+  const [isOpenProfileSettingsDialog, setIsOpenProfileSettingsDialog] =
+    useState(false);
 
   useEffect(() => {
     if (changeVisibilityState === "success") {
@@ -107,9 +110,12 @@ export const Header = ({
                       </Menu.Item>
                     </a>
                   ) : null}
-                  <Menu.Item value="settings">
+                  <Menu.Item
+                    value="profile"
+                    onClick={() => setIsOpenProfileSettingsDialog(true)}
+                  >
                     <HStack gap="2">
-                      <SettingsIcon /> Settings
+                      <SettingsIcon /> Edit Profile
                     </HStack>
                   </Menu.Item>
                   <Menu.Item
@@ -155,11 +161,18 @@ export const Header = ({
         </Menu.Positioner>
       </Menu.Root>
       {loggedInUser && (
-        <ApiUsageDialog
-          open={isOpenApiUsageDialog}
-          loggedInUser={loggedInUser}
-          onClose={() => setIsOpenApiUsageDialog(false)}
-        />
+        <>
+          <ApiUsageDialog
+            open={isOpenApiUsageDialog}
+            loggedInUser={loggedInUser}
+            onClose={() => setIsOpenApiUsageDialog(false)}
+          />
+          <ProfileSettingsDialog
+            open={isOpenProfileSettingsDialog}
+            loggedInUser={loggedInUser}
+            onClose={() => setIsOpenProfileSettingsDialog(false)}
+          />
+        </>
       )}
     </HStack>
   );

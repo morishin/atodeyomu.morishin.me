@@ -79,6 +79,7 @@ export const Content = ({
     } else {
       await Promise.all([unreadData.mutate(), readData.mutate()]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unreadData.mutate, readData.mutate]);
 
   return (
