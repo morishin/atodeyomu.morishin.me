@@ -7,7 +7,7 @@ import {
   LogInIcon,
   HomeIcon,
 } from "lucide-react";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 import { ChangeVisibilityDialog } from "@/app/[userName]/ChangeVisibilityDialog";
 import { requestChangeVisibility } from "@/app/[userName]/ChangeVisibilityFormAction";
@@ -17,6 +17,8 @@ import { Avatar } from "@/components/park-ui/avatar";
 import { HStack } from "@styled-system/jsx";
 import { Text } from "@/components/park-ui";
 import { Menu } from "@/components/park-ui/menu";
+import { ApiUsageDialog } from "@/app/[userName]/ApiUsageDialog";
+import { LoggedInUser } from "@/lib/types";
 
 export const Header = ({
   userName,
@@ -28,7 +30,7 @@ export const Header = ({
   userName: string;
   userIcon: string | null;
   isMyPage: boolean;
-  loggedInUser: { name: string; image: string | null } | null;
+  loggedInUser: LoggedInUser | null;
   isPrivate: boolean;
 }) => {
   const [
@@ -39,6 +41,8 @@ export const Header = ({
     state: "idle",
     timestamp: Date.now(),
   } as const);
+
+  const [isOpenApiUsageDialog, setIsOpenApiUsageDialog] = useState(false);
 
   useEffect(() => {
     if (changeVisibilityState === "success") {
@@ -108,9 +112,12 @@ export const Header = ({
                       <SettingsIcon /> Settings
                     </HStack>
                   </Menu.Item>
-                  <Menu.Item value="api">
+                  <Menu.Item
+                    value="api"
+                    onClick={() => setIsOpenApiUsageDialog(true)}
+                  >
                     <HStack gap="2">
-                      <ChevronsLeftRightEllipsisIcon /> API
+                      <ChevronsLeftRightEllipsisIcon /> API Usage
                     </HStack>
                   </Menu.Item>
                   <Menu.Separator />
@@ -147,6 +154,13 @@ export const Header = ({
           </Menu.Content>
         </Menu.Positioner>
       </Menu.Root>
+      {loggedInUser && (
+        <ApiUsageDialog
+          open={isOpenApiUsageDialog}
+          loggedInUser={loggedInUser}
+          onClose={() => setIsOpenApiUsageDialog(false)}
+        />
+      )}
     </HStack>
   );
 };

@@ -1,4 +1,4 @@
-import { randomBytes } from "crypto";
+import { randomBytes } from "node:crypto";
 
 import { init } from "@paralleldrive/cuid2";
 import type { NextAuthConfig, Session } from "next-auth";
@@ -47,6 +47,7 @@ export default {
           image: appUser.image,
           private: appUser.private,
           registerCompleted: appUser.registerCompleted,
+          personalAccessToken: appUser.personalAccessToken,
         },
         expires: session.expires,
       } satisfies Session;

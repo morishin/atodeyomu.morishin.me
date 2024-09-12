@@ -14,6 +14,7 @@ import { Tabs } from "@/components/park-ui";
 import { Button } from "@/components/park-ui/button";
 import { Toast } from "@/components/park-ui/toast";
 import { HStack, VStack } from "@styled-system/jsx";
+import { LoggedInUser } from "@/lib/types";
 
 type Page = ApiUserPageResponse[number];
 
@@ -38,7 +39,7 @@ export const Content = ({
 }: {
   userName: string;
   userIcon: string | null;
-  loggedInUser: { name: string; image: string | null } | null;
+  loggedInUser: LoggedInUser | null;
   isMyPage: boolean;
   isPrivate: boolean;
   initialTab: "read" | "unread";

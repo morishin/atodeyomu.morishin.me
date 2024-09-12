@@ -62,13 +62,12 @@ export async function GET(
   });
 }
 
-export async function POST(request: NextRequest) {
-  const session = await auth();
-  if (!session?.user) {
-    return new Response(null, { status: 401 });
-  }
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { userName: string } }
+) {
   const user = await prisma.user.findUniqueOrThrow({
-    where: { id: session.user.id },
+    where: { name: params.userName },
   });
 
   const authorization = request.headers.get("authorization");
@@ -86,13 +85,34 @@ export async function POST(request: NextRequest) {
     return new Response("Failed to fetch the page", { status: 500 });
   }
 
-  const page = await prisma.page.create({
-    data: {
+  const page = await prisma.page.upsert({
+    select: {
+      id: true,
+      url: true,
+      title: true,
+      description: true,
+      image: true,
+      createdAt: true,
+    },
+    where: {
+      userId_url: {
+        userId: user.id,
+        url: body.url,
+      },
+    },
+    create: {
       userId: user.id,
       url: body.url,
       title: pageInfo.title ?? "",
       description: pageInfo.description ?? "",
       image: pageInfo.image,
+    },
+    update: {
+      title: pageInfo.title ?? "",
+      description: pageInfo.description ?? "",
+      image: pageInfo.image,
+      createdAt: new Date().toISOString(),
+      readAt: null,
     },
   });
 

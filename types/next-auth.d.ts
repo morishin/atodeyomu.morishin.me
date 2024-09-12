@@ -6,8 +6,10 @@ declare module "next-auth" {
    */
   interface Session extends DefaultSession {
     user?: DefaultSession["user"] & {
+      name: string;
       private: boolean;
       registerCompleted: boolean;
+      personalAccessToken: string;
     };
   }
 }

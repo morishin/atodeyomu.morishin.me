@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 import { VStack } from "@styled-system/jsx";
 import { redirectToWelcomePageIfNeeded } from "@/lib/redirects";
+import { LoggedInUser } from "@/lib/types";
 
 type Page = ApiUserPageResponse[number];
 
@@ -29,6 +30,17 @@ export default async function Page({
     notFound();
   }
 
+  let loggedInUser: LoggedInUser | null;
+  if (!session?.user) {
+    loggedInUser = null;
+  } else {
+    loggedInUser = {
+      name: session.user.name,
+      image: session.user.image ?? null,
+      personalAccessToken: session.user?.personalAccessToken,
+    };
+  }
+
   return (
     <VStack
       alignItems="stretch"
@@ -38,14 +50,7 @@ export default async function Page({
       <Content
         userName={user.name}
         userIcon={user.image}
-        loggedInUser={
-          session?.user
-            ? {
-                name: session.user.name ?? "",
-                image: session.user.image ?? null,
-              }
-            : null
-        }
+        loggedInUser={loggedInUser}
         isPrivate={isPrivate}
         isMyPage={isMyPage}
         initialTab={Boolean(Number(read)) ? "read" : "unread"}
