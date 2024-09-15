@@ -7,7 +7,8 @@ import {
   LogInIcon,
   HomeIcon,
 } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useCallback, useEffect, useState } from "react";
+import { CreateToasterReturn } from "@ark-ui/react";
 
 import { ChangeVisibilityDialog } from "@/app/[userName]/ChangeVisibilityDialog";
 import { requestChangeVisibility } from "@/app/[userName]/ChangeVisibilityFormAction";
@@ -27,12 +28,14 @@ export const Header = ({
   isMyPage,
   loggedInUser,
   isPrivate,
+  toaster,
 }: {
   userName: string;
   userIcon: string | null;
   isMyPage: boolean;
   loggedInUser: LoggedInUser | null;
   isPrivate: boolean;
+  toaster: CreateToasterReturn;
 }) => {
   const [
     { state: changeVisibilityState },
@@ -52,6 +55,22 @@ export const Header = ({
       location.reload();
     }
   }, [changeVisibilityState]);
+
+  const openProfileSettingsDialog = useCallback(() => {
+    setIsOpenProfileSettingsDialog(true);
+  }, []);
+
+  const openApiUsageDialog = useCallback(() => {
+    setIsOpenApiUsageDialog(true);
+  }, []);
+
+  const closeProfileSettingsDialog = useCallback(() => {
+    setIsOpenProfileSettingsDialog(false);
+  }, []);
+
+  const closeApiUsageDialog = useCallback(() => {
+    setIsOpenApiUsageDialog(false);
+  }, []);
 
   return (
     <HStack
@@ -112,16 +131,13 @@ export const Header = ({
                   ) : null}
                   <Menu.Item
                     value="profile"
-                    onClick={() => setIsOpenProfileSettingsDialog(true)}
+                    onClick={openProfileSettingsDialog}
                   >
                     <HStack gap="2">
                       <SettingsIcon /> Edit Profile
                     </HStack>
                   </Menu.Item>
-                  <Menu.Item
-                    value="api"
-                    onClick={() => setIsOpenApiUsageDialog(true)}
-                  >
+                  <Menu.Item value="api" onClick={openApiUsageDialog}>
                     <HStack gap="2">
                       <ChevronsLeftRightEllipsisIcon /> API Usage
                     </HStack>
@@ -165,12 +181,13 @@ export const Header = ({
           <ApiUsageDialog
             open={isOpenApiUsageDialog}
             loggedInUser={loggedInUser}
-            onClose={() => setIsOpenApiUsageDialog(false)}
+            onClose={closeApiUsageDialog}
           />
           <ProfileSettingsDialog
             open={isOpenProfileSettingsDialog}
             loggedInUser={loggedInUser}
-            onClose={() => setIsOpenProfileSettingsDialog(false)}
+            onClose={closeProfileSettingsDialog}
+            toaster={toaster}
           />
         </>
       )}

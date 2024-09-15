@@ -2,6 +2,9 @@
 const nextConfig = {
   experimental: {
     reactCompiler: true,
+    serverActions: {
+      bodySizeLimit: '5mb',
+    }
   },
   images: {
     unoptimized: true,

@@ -90,6 +90,7 @@ export const Content = ({
         isMyPage={isMyPage}
         loggedInUser={loggedInUser}
         isPrivate={isPrivate}
+        toaster={toaster}
       />
       {isMyPage ? <AddPageForm refresh={refresh} toaster={toaster} /> : null}
       <Tabs.Root defaultValue={initialTab}>
