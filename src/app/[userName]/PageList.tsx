@@ -51,7 +51,7 @@ export const PageList = ({
           Load More
         </Button>
       ) : data?.[0]?.length === 0 ? (
-        <Text textAlign="center">No item</Text>
+        <Text textAlign="center">No items have been added yet.</Text>
       ) : null}
     </VStack>
   );

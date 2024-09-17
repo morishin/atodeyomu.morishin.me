@@ -1,5 +1,5 @@
 import { useActionState, useEffect } from "react";
-import { CheckIcon, CopyIcon, UndoIcon, XIcon } from "lucide-react";
+import { CheckIcon, CopyIcon, LinkIcon, UndoIcon, XIcon } from "lucide-react";
 import { CreateToasterReturn } from "@ark-ui/react";
 import Image from "next/image";
 
@@ -119,7 +119,7 @@ export const PageListItem = ({
                 onClick={(e) => e.preventDefault()}
               >
                 <Clipboard.Indicator copied={<CheckIcon />}>
-                  <CopyIcon />
+                  <LinkIcon />
                 </Clipboard.Indicator>
               </Button>
             </Clipboard.Trigger>

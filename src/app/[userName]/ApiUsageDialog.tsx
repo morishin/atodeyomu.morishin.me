@@ -55,6 +55,9 @@ export const ApiUsageDialog = ({
           <Stack p="6">
             <Stack gap="1">
               <Dialog.Title>API Usage</Dialog.Title>
+              <Dialog.Description>
+                You can also add items to the list via API.
+              </Dialog.Description>
             </Stack>
             <VStack alignItems="stretch">
               <Clipboard.Root value={personalAccessToken}>
@@ -108,7 +111,7 @@ export const ApiUsageDialog = ({
 
               <Clipboard.Root value={exampleCode}>
                 <Clipboard.Label asChild>
-                  <FormLabel>Example</FormLabel>
+                  <FormLabel>cURL Example</FormLabel>
                 </Clipboard.Label>
                 <Clipboard.Control>
                   <Clipboard.Input asChild>

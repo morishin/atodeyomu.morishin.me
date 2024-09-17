@@ -1,13 +1,14 @@
 import { redirect } from "next/navigation";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, LibraryBigIcon } from "lucide-react";
 import Image from "next/image";
 
 import { Text } from "@/components/park-ui";
 import { auth } from "@/lib/auth/auth";
 import { redirectToWelcomePageIfNeeded } from "@/lib/redirects";
-import { VStack } from "@styled-system/jsx";
+import { HStack, VStack } from "@styled-system/jsx";
 import { Button } from "@/components/park-ui/button";
 import { Card } from "@/components/park-ui/card";
+import Link from "next/link";
 
 export default async function Home() {
   const session = await auth();
@@ -25,20 +26,23 @@ export default async function Home() {
       gap="7"
     >
       <Text as="h1" fontSize="2xl">
-        ato de yomu
+        <HStack>
+          <LibraryBigIcon />
+          ato de yomu
+        </HStack>
       </Text>
-      <a href="/api/auth/signin">
-        <Button variant="outline" size="xl">
-          Get Started
-          <ArrowRightIcon />
-        </Button>
-      </a>
       <Text fontSize="xl">
         <b>ato de yomu</b> is a reading list app that lets you save web pages to
         read later. You can choose to keep your list private or share it with
         others.
       </Text>
-      <Card.Root maxWidth="625px" marginTop="8">
+      <Link href="/api/auth/signin">
+        <Button variant="outline" size="xl">
+          Get Started
+          <ArrowRightIcon />
+        </Button>
+      </Link>
+      <Card.Root maxWidth="625px" marginTop="4">
         <Image
           width="1250"
           height="1181"

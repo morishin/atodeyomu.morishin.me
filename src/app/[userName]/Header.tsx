@@ -21,6 +21,7 @@ import { Menu } from "@/components/park-ui/menu";
 import { ApiUsageDialog } from "@/app/[userName]/ApiUsageDialog";
 import { LoggedInUser } from "@/lib/types";
 import { ProfileSettingsDialog } from "@/app/[userName]/ProfileSettingsDialog";
+import Link from "next/link";
 
 export const Header = ({
   userName,
@@ -79,10 +80,12 @@ export const Header = ({
       padding={{ smDown: "2", base: "0" }}
     >
       <HStack alignItems="center">
-        <HStack alignItems="center">
-          <Avatar src={userIcon ?? undefined} name={userName} />
-          <Text fontSize="xl">{userName}</Text>
-        </HStack>
+        <Link href={`/${userName}`}>
+          <HStack alignItems="center">
+            <Avatar src={userIcon ?? undefined} name={userName} />
+            <Text fontSize="xl">{userName}</Text>
+          </HStack>
+        </Link>
         <HStack alignItems="center" gap="1">
           {isMyPage ? (
             <ChangeVisibilityDialog
@@ -112,7 +115,7 @@ export const Header = ({
               {loggedInUser ? (
                 <>
                   {!isMyPage ? (
-                    <a href="/">
+                    <Link href="/">
                       <Menu.Item value="home">
                         <HStack gap="2">
                           <Avatar
@@ -127,7 +130,7 @@ export const Header = ({
                           Home
                         </HStack>
                       </Menu.Item>
-                    </a>
+                    </Link>
                   ) : null}
                   <Menu.Item
                     value="profile"
@@ -143,33 +146,33 @@ export const Header = ({
                     </HStack>
                   </Menu.Item>
                   <Menu.Separator />
-                  <a href="/api/auth/signout">
+                  <Link href="/api/auth/signout">
                     <Menu.Item value="logout">
                       <HStack gap="2">
                         <LogOutIcon />
                         Logout
                       </HStack>
                     </Menu.Item>
-                  </a>
+                  </Link>
                 </>
               ) : (
                 <>
-                  <a href="/">
+                  <Link href="/">
                     <Menu.Item value="home">
                       <HStack gap="2">
                         <HomeIcon />
                         Home
                       </HStack>
                     </Menu.Item>
-                  </a>
-                  <a href="/api/auth/signin">
+                  </Link>
+                  <Link href="/api/auth/signin">
                     <Menu.Item value="login">
                       <HStack gap="2">
                         <LogInIcon />
                         Login
                       </HStack>
                     </Menu.Item>
-                  </a>
+                  </Link>
                 </>
               )}
             </Menu.ItemGroup>
