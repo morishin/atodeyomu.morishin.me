@@ -1,5 +1,5 @@
 import { useActionState, useEffect } from "react";
-import { CheckIcon, CopyIcon, LinkIcon, UndoIcon, XIcon } from "lucide-react";
+import { CheckIcon, LinkIcon, UndoIcon, XIcon } from "lucide-react";
 import { CreateToasterReturn } from "@ark-ui/react";
 import Image from "next/image";
 

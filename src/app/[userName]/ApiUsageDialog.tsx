@@ -1,5 +1,6 @@
 import { CheckIcon, CopyIcon, RefreshCcwIcon, XIcon } from "lucide-react";
 import { useActionState } from "react";
+import Image from "next/image";
 
 import { Button } from "@/components/park-ui/button";
 import { Dialog } from "@/components/park-ui/dialog";
@@ -10,7 +11,6 @@ import { FormLabel } from "@/components/park-ui/form-label";
 import { Textarea } from "@/components/park-ui/textarea";
 import { requestAccessTokenRotate } from "@/app/[userName]/AccessTokenRotateFormAction";
 import { LoggedInUser } from "@/lib/types";
-import Image from "next/image";
 import { Text } from "@/components/park-ui";
 
 export const ApiUsageDialog = ({
@@ -158,8 +158,7 @@ export const ApiUsageDialog = ({
                 Add a page via iOS share sheet
               </Text>
               <Dialog.Description>
-                You can add a page from the browser's share sheet by using iOS
-                Shortcuts.
+                You can add a page from the share sheet by using iOS Shortcuts.
               </Dialog.Description>
               <ol
                 style={{

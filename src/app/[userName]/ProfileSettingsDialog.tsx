@@ -65,6 +65,7 @@ export const ProfileSettingsDialog = ({
   }, [
     onClose,
     toaster,
+    userName,
     userNameErrorMessage,
     userNameState,
     userNameTimestamp,
