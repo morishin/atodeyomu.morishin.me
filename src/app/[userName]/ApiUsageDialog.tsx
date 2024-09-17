@@ -3,13 +3,15 @@ import { useActionState } from "react";
 
 import { Button } from "@/components/park-ui/button";
 import { Dialog } from "@/components/park-ui/dialog";
-import { Stack, VStack } from "@styled-system/jsx";
+import { Box, Stack, VStack } from "@styled-system/jsx";
 import { Clipboard } from "@/components/park-ui/clipboard";
 import { Input } from "@/components/park-ui/styled/clipboard";
 import { FormLabel } from "@/components/park-ui/form-label";
 import { Textarea } from "@/components/park-ui/textarea";
 import { requestAccessTokenRotate } from "@/app/[userName]/AccessTokenRotateFormAction";
 import { LoggedInUser } from "@/lib/types";
+import Image from "next/image";
+import { Text } from "@/components/park-ui";
 
 export const ApiUsageDialog = ({
   open,
@@ -51,18 +53,28 @@ export const ApiUsageDialog = ({
     >
       <Dialog.Backdrop />
       <Dialog.Positioner>
-        <Dialog.Content width="2xl">
+        <Dialog.Content
+          width="2xl"
+          maxWidth="90vw"
+          maxHeight="90vh"
+          overflowY="scroll"
+        >
           <Stack p="6">
             <Stack gap="1">
               <Dialog.Title>API Usage</Dialog.Title>
               <Dialog.Description>
-                You can also add items to the list via API.
+                You can also add pages to the list via API.
               </Dialog.Description>
             </Stack>
             <VStack alignItems="stretch">
-              <Clipboard.Root value={personalAccessToken}>
+              <Clipboard.Root
+                value={personalAccessToken}
+                paddingBottom="6"
+                borderBottomWidth="1"
+                borderBottomColor="gray.8"
+              >
                 <Clipboard.Label asChild>
-                  <FormLabel>Access Token</FormLabel>
+                  <FormLabel>Your Access Token</FormLabel>
                 </Clipboard.Label>
                 <Clipboard.Control>
                   <Clipboard.Input asChild>
@@ -108,11 +120,15 @@ export const ApiUsageDialog = ({
                   </form>
                 </Clipboard.Control>
               </Clipboard.Root>
-
-              <Clipboard.Root value={exampleCode}>
-                <Clipboard.Label asChild>
-                  <FormLabel>cURL Example</FormLabel>
-                </Clipboard.Label>
+              <Clipboard.Root
+                value={exampleCode}
+                paddingBottom="6"
+                borderBottomWidth="1"
+                borderBottomColor="gray.8"
+              >
+                <Text as="h3" size="md" fontWeight="semibold">
+                  Add a page via cURL
+                </Text>
                 <Clipboard.Control>
                   <Clipboard.Input asChild>
                     <Textarea
@@ -137,6 +153,70 @@ export const ApiUsageDialog = ({
                 </Clipboard.Control>
               </Clipboard.Root>
             </VStack>
+            <Stack gap="1">
+              <Text as="h3" size="md" fontWeight="semibold">
+                Add a page via iOS share sheet
+              </Text>
+              <Dialog.Description>
+                You can add a page from the browser's share sheet by using iOS
+                Shortcuts.
+              </Dialog.Description>
+              <ol
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1em",
+                  listStyleType: "decimal",
+                  listStylePosition: "inside",
+                  lineHeight: "2",
+                  paddingTop: "0.5em",
+                }}
+              >
+                <li>
+                  <Text as="span">Download the shortcut.</Text>
+                  <Box marginLeft="5">
+                    <a
+                      href="https://www.icloud.com/shortcuts/9c584a6c7a8b407ea20248293dd61c42"
+                      target="_blank"
+                    >
+                      <Button variant="subtle">
+                        <Image
+                          src="/shortcut.png"
+                          width="32"
+                          height="32"
+                          alt=""
+                        />
+                        Download
+                      </Button>
+                    </a>
+                  </Box>
+                </li>
+                <li>
+                  <Text as="span">Setup the shortcut</Text>
+                  <Box marginLeft="5">
+                    <Image
+                      src="/configure_shortcut.png"
+                      width="948"
+                      height="614"
+                      alt=""
+                    />
+                  </Box>
+                </li>
+                <li>
+                  <Text as="span">
+                    Available in the share sheet opened from Safari.
+                  </Text>
+                  <Box marginLeft="5">
+                    <Image
+                      src="/share_sheet.png"
+                      width="609"
+                      height="282"
+                      alt=""
+                    />
+                  </Box>
+                </li>
+              </ol>
+            </Stack>
           </Stack>
           <Dialog.CloseTrigger asChild position="absolute" top="2" right="2">
             <Button aria-label="Close Dialog" variant="ghost" size="sm">

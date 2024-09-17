@@ -20,7 +20,7 @@ export const RssDialog = ({ children }: { children: JSX.Element }) => {
       </Dialog.Trigger>
       <Dialog.Backdrop />
       <Dialog.Positioner>
-        <Dialog.Content>
+        <Dialog.Content maxHeight="90vh" overflowY="scroll">
           <Stack p="6">
             <Stack gap="1">
               <Dialog.Title>RSS</Dialog.Title>

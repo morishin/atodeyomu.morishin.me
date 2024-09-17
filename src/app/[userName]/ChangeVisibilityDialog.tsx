@@ -31,7 +31,7 @@ export const ChangeVisibilityDialog = ({
       </Dialog.Trigger>
       <Dialog.Backdrop />
       <Dialog.Positioner>
-        <Dialog.Content>
+        <Dialog.Content maxHeight="90vh" overflowY="scroll">
           <form action={changeVisibilityAction}>
             <input type="hidden" name="private" value={isPrivate ? "0" : "1"} />
             <Stack gap="8" p="6">

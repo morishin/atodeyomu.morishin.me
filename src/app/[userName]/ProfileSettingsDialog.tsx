@@ -111,7 +111,12 @@ export const ProfileSettingsDialog = ({
     >
       <Dialog.Backdrop />
       <Dialog.Positioner>
-        <Dialog.Content width="2xl">
+        <Dialog.Content
+          width="2xl"
+          maxWidth="90vw"
+          maxHeight="90vh"
+          overflowY="scroll"
+        >
           <Stack p="6">
             <Stack gap="1">
               <Dialog.Title>Edit Profile</Dialog.Title>
