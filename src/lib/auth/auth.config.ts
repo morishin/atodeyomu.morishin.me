@@ -55,4 +55,63 @@ export default {
       return newSession;
     },
   },
+  // https://next-auth.js.org/configuration/options#example
+  cookies:
+    process.env.NODE_ENV === "production"
+      ? {
+          sessionToken: {
+            name: `__Secure-next-auth.session-token`,
+            options: {
+              httpOnly: true,
+              sameSite: "none",
+              path: "/",
+              secure: true,
+            },
+          },
+          callbackUrl: {
+            name: `__Secure-next-auth.callback-url`,
+            options: {
+              sameSite: "none",
+              path: "/",
+              secure: true,
+            },
+          },
+          csrfToken: {
+            name: `__Host-next-auth.csrf-token`,
+            options: {
+              httpOnly: true,
+              sameSite: "none",
+              path: "/",
+              secure: true,
+            },
+          },
+          pkceCodeVerifier: {
+            name: `${cookiePrefix}next-auth.pkce.code_verifier`,
+            options: {
+              httpOnly: true,
+              sameSite: "none",
+              path: "/",
+              secure: true,
+            },
+          },
+          state: {
+            name: `${cookiePrefix}next-auth.state`,
+            options: {
+              httpOnly: true,
+              sameSite: "none",
+              path: "/",
+              secure: true,
+            },
+          },
+          nonce: {
+            name: `${cookiePrefix}next-auth.nonce`,
+            options: {
+              httpOnly: true,
+              sameSite: "none",
+              path: "/",
+              secure: true,
+            },
+          },
+        }
+      : undefined,
 } satisfies NextAuthConfig;
