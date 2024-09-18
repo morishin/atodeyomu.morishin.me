@@ -50,7 +50,7 @@ export const WelcomeForm = ({ currentName }: { currentName: string }) => {
       </Text>
       <form action={action}>
         <VStack gap="4">
-          <Text fontSize="md">Choose your name</Text>
+          <Text fontSize="md">Choose your username</Text>
           <HStack padding="4" borderRadius="xl" bgColor="gray.3">
             <Text fontSize="md">atodeyomu.morishin.me</Text>
             <Text fontSize="md">/</Text>

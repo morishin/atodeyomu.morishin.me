@@ -25,12 +25,14 @@ export default async function Home() {
       paddingInline="4"
       gap="7"
     >
-      <Text as="h1" fontSize="2xl">
-        <HStack>
-          <LibraryBigIcon />
-          ato de yomu
-        </HStack>
-      </Text>
+      <Link href="/">
+        <Text as="h1" fontSize="2xl">
+          <HStack>
+            <LibraryBigIcon />
+            ato de yomu
+          </HStack>
+        </Text>
+      </Link>
       <Text fontSize="xl">
         <b>ato de yomu</b> is a reading list app that lets you save web pages to
         read later. You can choose to keep your list private or share it with

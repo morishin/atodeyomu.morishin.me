@@ -2,8 +2,8 @@
 
 import { CircleCheckIcon, CircleXIcon, XIcon } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useCallback } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useCallback, useState } from "react";
 import useSWRInfinite from "swr/infinite";
 
 import { AddPageForm } from "@/app/[userName]/AddPageForm";
@@ -82,6 +82,9 @@ export const Content = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unreadData.mutate, readData.mutate]);
 
+  const searchParams = useSearchParams();
+  const currentTab = searchParams.get("read") === "1" ? "read" : "unread";
+
   return (
     <VStack gap="6">
       <Header
@@ -93,7 +96,7 @@ export const Content = ({
         toaster={toaster}
       />
       {isMyPage ? <AddPageForm refresh={refresh} toaster={toaster} /> : null}
-      <Tabs.Root defaultValue={initialTab}>
+      <Tabs.Root value={currentTab}>
         <Tabs.List>
           <Link href={pathname}>
             <Tabs.Trigger key={"unread"} value={"unread"}>

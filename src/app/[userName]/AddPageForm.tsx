@@ -1,5 +1,5 @@
 import { PlusIcon } from "lucide-react";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { CreateToasterReturn } from "@ark-ui/react";
 
 import { requestAddPage } from "@/app/[userName]/AddPageFormAction";
@@ -32,6 +32,8 @@ export function AddPageForm({
     }
   }, [state, refresh, timestamp, toaster]);
 
+  const [isAddButtonEnabled, setIsAddButtonEnabled] = useState(false);
+
   return (
     <Box width="100%" padding={{ smDown: "2", base: "0" }}>
       <form action={action}>
@@ -44,9 +46,16 @@ export function AddPageForm({
               placeholder="https://..."
               required={true}
               disabled={isPending}
+              onChange={(e) => {
+                setIsAddButtonEnabled(e.target.value.length > 0);
+              }}
             />
           </Field.Root>
-          <Button type="submit" disabled={isPending} loading={isPending}>
+          <Button
+            type="submit"
+            disabled={!isAddButtonEnabled || isPending}
+            loading={isPending}
+          >
             <PlusIcon />
             <Box display={{ smDown: "none", base: "inline" }}>
               Add to unread

@@ -1,5 +1,6 @@
 import { useActionState, useEffect } from "react";
 
+import { Button } from "@/components/park-ui/button";
 import { requestDeleteUser } from "@/app/welcome/DeleteUserFormAction";
 
 export const DeleteUserForm = () => {
@@ -18,9 +19,9 @@ export const DeleteUserForm = () => {
 
   return (
     <form action={action}>
-      <button type="submit" style={{ cursor: "pointer" }}>
-        Cencel creating account
-      </button>
+      <Button type="submit" variant="ghost" colorPalette="red">
+        Cancel creating account
+      </Button>
     </form>
   );
 };

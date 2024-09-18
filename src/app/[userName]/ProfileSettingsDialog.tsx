@@ -140,6 +140,7 @@ export const ProfileSettingsDialog = ({
                       <Field.Root flex="1">
                         <Field.Input
                           type="text"
+                          autoComplete="off"
                           name="name"
                           placeholder="your_name"
                           required={true}
@@ -213,7 +214,7 @@ export const ProfileSettingsDialog = ({
                                   name={loggedInUser.name}
                                   width="120px"
                                   height="120px"
-                                  objectFit="cover"
+                                  display="flex"
                                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                   // @ts-expect-error
                                   size="dummy"
