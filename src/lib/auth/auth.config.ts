@@ -91,7 +91,6 @@ export default {
               sameSite: "lax",
               path: "/",
               secure: true,
-              maxAge: 900,
             },
           },
           state: {
@@ -101,7 +100,6 @@ export default {
               sameSite: "lax",
               path: "/",
               secure: true,
-              maxAge: 900,
             },
           },
           nonce: {
