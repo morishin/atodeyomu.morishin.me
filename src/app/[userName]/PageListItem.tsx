@@ -1,7 +1,8 @@
 import { useActionState, useEffect } from "react";
-import { CheckIcon, LinkIcon, UndoIcon, XIcon } from "lucide-react";
+import { CheckIcon, PlusIcon, UndoIcon, XIcon } from "lucide-react";
 import { CreateToasterReturn } from "@ark-ui/react";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 import { Button } from "@/components/park-ui/button";
 import { HStack, VStack, Box } from "@styled-system/jsx";
@@ -9,7 +10,7 @@ import { Text } from "@/components/park-ui";
 import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
 import { requestReadPage } from "@/app/[userName]/ReadPageFormAction";
 import { requestDeletePage } from "@/app/[userName]/DeletePageFormAction";
-import { Clipboard } from "@/components/park-ui/clipboard";
+import { requestAddToMyUnread } from "@/app/[userName]/AddToMyUnreadFormAction";
 
 export const PageListItem = ({
   page,
@@ -24,6 +25,9 @@ export const PageListItem = ({
   refresh: () => Promise<void>;
   toaster: CreateToasterReturn;
 }) => {
+  const session = useSession();
+  const isLoggedin = session.status === "authenticated";
+
   const [
     { state: readState, timestamp: readTimestamp },
     readAction,
@@ -54,6 +58,24 @@ export const PageListItem = ({
       refresh();
     }
   }, [deleteState, refresh]);
+
+  const [
+    { state: addToMyUnreadState, timestamp: addToMyUnreadTimestamp },
+    addToMyUnreadAction,
+    isAddToMyUnreadPending,
+  ] = useActionState(requestAddToMyUnread, {
+    state: "idle",
+    timestamp: Date.now(),
+  } as const);
+
+  useEffect(() => {
+    if (addToMyUnreadState === "success") {
+      toaster.create({
+        title: "Added to your unread",
+        type: "success",
+      });
+    }
+  }, [addToMyUnreadState, toaster, addToMyUnreadTimestamp]);
 
   return (
     <a key={page.id} href={page.url}>
@@ -110,57 +132,58 @@ export const PageListItem = ({
             {page.description}
           </Text>
         </VStack>
-        <Clipboard.Root value={page.url}>
-          <Clipboard.Control>
-            <Clipboard.Trigger asChild>
-              <Button
-                variant="subtle"
-                size="sm"
-                onClick={(e) => e.preventDefault()}
-              >
-                <Clipboard.Indicator copied={<CheckIcon />}>
-                  <LinkIcon />
-                </Clipboard.Indicator>
-              </Button>
-            </Clipboard.Trigger>
-          </Clipboard.Control>
-        </Clipboard.Root>
         {isMyPage ? (
-          <form action={readAction}>
+          <>
+            <form action={readAction}>
+              <input type="hidden" name="pageId" value={page.id} />
+              <input type="hidden" name="read" value={isRead ? "0" : "1"} />
+              <Button
+                type="submit"
+                size="xs"
+                variant="subtle"
+                loading={isReadPending}
+              >
+                {isRead ? <UndoIcon /> : <CheckIcon color="green" />}
+                <Box display={{ smDown: "none" }}>
+                  {isRead ? "Mark as unread" : "Mark as read"}
+                </Box>
+              </Button>
+            </form>
+            <form
+              action={deleteAction}
+              onSubmit={(e) => {
+                if (
+                  !confirm(`Are you sure to delete this page?\n"${page.title}"`)
+                ) {
+                  e.preventDefault();
+                }
+              }}
+            >
+              <input type="hidden" name="pageId" value={page.id} />
+              <Button
+                type="submit"
+                size="xs"
+                variant="ghost"
+                loading={isDeletePending}
+              >
+                <XIcon />
+              </Button>
+            </form>
+          </>
+        ) : isLoggedin ? (
+          <form action={addToMyUnreadAction}>
             <input type="hidden" name="pageId" value={page.id} />
-            <input type="hidden" name="read" value={isRead ? "0" : "1"} />
             <Button
               type="submit"
               size="xs"
               variant="subtle"
-              loading={isReadPending}
+              loading={isAddToMyUnreadPending}
             >
-              {isRead ? <UndoIcon /> : <CheckIcon color="green" />}
-              <Box display={{ smDown: "none" }}>
-                {isRead ? "Mark as unread" : "Mark as read"}
+              <PlusIcon />
+              <Box display={{ base: "inline", smDown: "none" }}>
+                Add to my unread
               </Box>
-            </Button>
-          </form>
-        ) : null}
-        {isMyPage ? (
-          <form
-            action={deleteAction}
-            onSubmit={(e) => {
-              if (
-                !confirm(`Are you sure to delete this page?\n"${page.title}"`)
-              ) {
-                e.preventDefault();
-              }
-            }}
-          >
-            <input type="hidden" name="pageId" value={page.id} />
-            <Button
-              type="submit"
-              size="xs"
-              variant="ghost"
-              loading={isDeletePending}
-            >
-              <XIcon />
+              <Box display={{ base: "none", smDown: "inline" }}>Add</Box>
             </Button>
           </form>
         ) : null}
