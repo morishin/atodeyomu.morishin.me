@@ -117,7 +117,8 @@ export const PageListItem = ({
             as="h3"
             fontWeight="semibold"
             textOverflow="ellipsis"
-            lineClamp={1}
+            lineClamp={{ smDown: 2, base: 1 }}
+            textWrap="pretty"
           >
             {page.title}
           </Text>

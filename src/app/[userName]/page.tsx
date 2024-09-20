@@ -21,6 +21,10 @@ export async function generateMetadata({
   const isRead = searchParams.read === "1";
   const title = `${userName}'s ${isRead ? "reads" : "unreads"} | ato de yomu`;
 
+  const user = await prisma.user.findUnique({
+    where: { name: userName },
+  });
+
   return {
     title,
     openGraph: {
@@ -29,7 +33,7 @@ export async function generateMetadata({
       type: "website",
       url: `https://atodeyomu.morishin.me/${userName}`,
       images: {
-        url: "https://atodeyomu.morishin.me/og-image.png",
+        url: user?.image ?? "https://atodeyomu.morishin.me/og-image.png",
         width: 630,
         height: 630,
       },
