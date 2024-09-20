@@ -17,6 +17,14 @@ export async function GET(
         where: {
           readAt: isRead ? { not: null } : null,
         },
+        orderBy: [
+          {
+            readAt: "desc",
+          },
+          {
+            createdAt: "desc",
+          },
+        ],
       },
     },
   });
