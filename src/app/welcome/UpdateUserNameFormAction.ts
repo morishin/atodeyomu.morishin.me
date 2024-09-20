@@ -1,6 +1,8 @@
 "use server";
 
-import { auth } from "@/lib/auth/auth";
+import { getServerSession } from "next-auth/next";
+
+import { authConfig } from "@/lib/auth/auth.config";
 import { prisma } from "@/lib/prisma";
 
 type UpdateUserNameFormResponse = {
@@ -14,7 +16,7 @@ export async function requestUpdateUserName(
   _prevState: UpdateUserNameFormResponse,
   formData: FormData
 ): Promise<UpdateUserNameFormResponse> {
-  const session = await auth();
+  const session = await getServerSession(authConfig);
   const userId = session?.user?.id;
   if (!userId) {
     return { state: "error", timestamp: Date.now() };

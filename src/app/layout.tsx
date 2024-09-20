@@ -1,9 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { getServerSession } from "next-auth/next";
 
 import ClientSessionProvider from "@/components/ClientSessionProvider";
-import { auth } from "@/lib/auth/auth";
 import { VStack } from "@styled-system/jsx";
+import { authConfig } from "@/lib/auth/auth.config";
 
 export const metadata: Metadata = {
   title: "ato de yomu",
@@ -15,7 +16,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
+  const session = await getServerSession(authConfig);
   return (
     <html lang="en">
       <head>

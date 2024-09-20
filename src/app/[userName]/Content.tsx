@@ -3,7 +3,7 @@
 import { CircleCheckIcon, CircleXIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import useSWRInfinite from "swr/infinite";
 
 import { AddPageForm } from "@/app/[userName]/AddPageForm";
@@ -35,14 +35,12 @@ export const Content = ({
   isMyPage,
   loggedInUser,
   isPrivate,
-  initialTab,
 }: {
   userName: string;
   userIcon: string | null;
   loggedInUser: LoggedInUser | null;
   isMyPage: boolean;
   isPrivate: boolean;
-  initialTab: "read" | "unread";
 }) => {
   const getKeyUnread = (pageIndex: number, previousPageData: Page[]) => {
     if (previousPageData && !previousPageData.length) return null;

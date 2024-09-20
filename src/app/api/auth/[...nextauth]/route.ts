@@ -1,4 +1,8 @@
-import { handlers } from "@/lib/auth/auth";
+import NextAuth from "next-auth";
 
-export const GET = handlers.GET;
-export const POST = handlers.POST;
+import { authConfig } from "@/lib/auth/auth.config";
+
+// https://authjs.dev/getting-started/migrating-to-v5#authenticating-server-side
+const handler = NextAuth(authConfig);
+
+export { handler as GET, handler as POST };

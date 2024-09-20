@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
+import { getServerSession } from "next-auth/next";
 
 import { Content } from "@/app/[userName]/Content";
 import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
-import { auth } from "@/lib/auth/auth";
+import { authConfig } from "@/lib/auth/auth.config";
 import { prisma } from "@/lib/prisma";
 import { VStack } from "@styled-system/jsx";
 import { redirectToWelcomePageIfNeeded } from "@/lib/redirects";
@@ -12,15 +13,13 @@ type Page = ApiUserPageResponse[number];
 
 export default async function Page({
   params: { userName },
-  searchParams: { read },
 }: {
   params: { userName: string };
-  searchParams: { read: string };
 }) {
   const user = await prisma.user.findUniqueOrThrow({
     where: { name: userName },
   });
-  const session = await auth();
+  const session = await getServerSession(authConfig);
   await redirectToWelcomePageIfNeeded(session);
 
   const isMyPage = session?.user?.id === user.id;
@@ -53,7 +52,6 @@ export default async function Page({
         loggedInUser={loggedInUser}
         isPrivate={isPrivate}
         isMyPage={isMyPage}
-        initialTab={Boolean(Number(read)) ? "read" : "unread"}
       />
     </VStack>
   );

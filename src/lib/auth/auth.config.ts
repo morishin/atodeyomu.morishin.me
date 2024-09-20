@@ -1,9 +1,10 @@
 import { randomBytes } from "node:crypto";
 
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { init } from "@paralleldrive/cuid2";
-import type { NextAuthConfig, Session } from "next-auth";
-import Google from "next-auth/providers/google";
 import { User } from "@prisma/client";
+import type { NextAuthOptions, Session } from "next-auth";
+import Google from "next-auth/providers/google";
 
 import { prisma } from "@/lib/prisma";
 
@@ -20,11 +21,13 @@ const generateUniqueName = async (name: string) => {
     : `${name}-${cuid()}`;
 };
 
-export default {
+export const authConfig = {
+  adapter: PrismaAdapter(prisma),
+  session: { strategy: "database" },
   providers: [
     Google({
-      clientId: process.env.AUTH_PROVIDER_GOOGLE_CLIENT_ID,
-      clientSecret: process.env.AUTH_PROVIDER_GOOGLE_CLIENT_SECRET,
+      clientId: process.env.AUTH_PROVIDER_GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.AUTH_PROVIDER_GOOGLE_CLIENT_SECRET!,
       profile: async (profile) => {
         const name = await generateUniqueName(profile.email.split("@")[0]);
         const personalAccessToken = randomBytes(20).toString("hex");
@@ -63,7 +66,7 @@ export default {
             name: `__Secure-next-auth.session-token`,
             options: {
               httpOnly: true,
-              sameSite: "none",
+              sameSite: "lax",
               path: "/",
               secure: true,
             },
@@ -71,7 +74,7 @@ export default {
           callbackUrl: {
             name: `__Secure-next-auth.callback-url`,
             options: {
-              sameSite: "none",
+              sameSite: "lax",
               path: "/",
               secure: true,
             },
@@ -80,7 +83,7 @@ export default {
             name: `__Host-next-auth.csrf-token`,
             options: {
               httpOnly: true,
-              sameSite: "none",
+              sameSite: "lax",
               path: "/",
               secure: true,
             },
@@ -89,7 +92,7 @@ export default {
             name: `${cookiePrefix}next-auth.pkce.code_verifier`,
             options: {
               httpOnly: true,
-              sameSite: "none",
+              sameSite: "lax",
               path: "/",
               secure: true,
             },
@@ -98,7 +101,7 @@ export default {
             name: `${cookiePrefix}next-auth.state`,
             options: {
               httpOnly: true,
-              sameSite: "none",
+              sameSite: "lax",
               path: "/",
               secure: true,
             },
@@ -107,11 +110,11 @@ export default {
             name: `${cookiePrefix}next-auth.nonce`,
             options: {
               httpOnly: true,
-              sameSite: "none",
+              sameSite: "lax",
               path: "/",
               secure: true,
             },
           },
         }
       : undefined,
-} satisfies NextAuthConfig;
+} satisfies NextAuthOptions;

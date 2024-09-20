@@ -1,8 +1,10 @@
 "use server";
 
-import { auth } from "@/lib/auth/auth";
+import { getServerSession } from "next-auth/next";
+
 import { PageInfo } from "@/lib/PageInfo";
 import { prisma } from "@/lib/prisma";
+import { authConfig } from "@/lib/auth/auth.config";
 
 type AddPageFormResponse = {
   state: "idle" | "success" | "error";
@@ -13,7 +15,7 @@ export async function requestAddPage(
   _prevState: AddPageFormResponse,
   formData: FormData
 ): Promise<AddPageFormResponse> {
-  const session = await auth();
+  const session = await getServerSession(authConfig);
   if (!session?.user?.id) {
     return { state: "error", timestamp: Date.now() };
   }

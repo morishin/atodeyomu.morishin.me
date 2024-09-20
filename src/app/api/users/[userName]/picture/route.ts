@@ -1,8 +1,9 @@
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth/next";
 
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth/auth";
+import { authConfig } from "@/lib/auth/auth.config";
 
 export async function POST(
   request: Request,
@@ -11,7 +12,7 @@ export async function POST(
   if (request.body === null) {
     return NextResponse.json(null, { status: 400 });
   }
-  const session = await auth();
+  const session = await getServerSession(authConfig);
   if (!session?.user) {
     return NextResponse.json(null, { status: 401 });
   }

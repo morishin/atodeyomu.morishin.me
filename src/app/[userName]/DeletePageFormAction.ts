@@ -1,6 +1,7 @@
 "use server";
+import { getServerSession } from "next-auth/next";
 
-import { auth } from "@/lib/auth/auth";
+import { authConfig } from "@/lib/auth/auth.config";
 import { prisma } from "@/lib/prisma";
 
 type DeletePageFormResponse = {
@@ -12,7 +13,7 @@ export async function requestDeletePage(
   _prevState: DeletePageFormResponse,
   formData: FormData
 ): Promise<DeletePageFormResponse> {
-  const session = await auth();
+  const session = await getServerSession(authConfig);
   if (!session?.user?.id) {
     return { state: "error", timestamp: Date.now() };
   }
