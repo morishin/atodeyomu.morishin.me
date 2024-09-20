@@ -11,10 +11,40 @@ import { LoggedInUser } from "@/lib/types";
 
 type Page = ApiUserPageResponse[number];
 
+export async function generateMetadata({
+  params: { userName },
+  searchParams,
+}: {
+  params: { userName: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const isRead = searchParams.read === "1";
+  const title = `${userName}'s ${isRead ? "reads" : "unreads"} | ato de yomu`;
+
+  return {
+    title,
+    openGraph: {
+      title,
+      siteName: "ato de yomu",
+      type: "website",
+      url: `https://atodeyomu.morishin.me/${userName}`,
+      images: {
+        url: "https://atodeyomu.morishin.me/og-image.png",
+        width: 630,
+        height: 630,
+      },
+    },
+    twitter: {
+      card: "summary",
+    },
+  };
+}
+
 export default async function Page({
   params: { userName },
 }: {
   params: { userName: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const user = await prisma.user.findUniqueOrThrow({
     where: { name: userName },
@@ -43,7 +73,7 @@ export default async function Page({
   return (
     <VStack
       alignItems="stretch"
-      paddingTop={{ smDown: "0", base: "4" }}
+      paddingTop={{ smDown: "2", base: "4" }}
       paddingBottom="12"
     >
       <Content

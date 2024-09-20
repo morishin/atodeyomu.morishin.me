@@ -84,7 +84,7 @@ export const Content = ({
   const currentTab = searchParams.get("read") === "1" ? "read" : "unread";
 
   return (
-    <VStack gap="6">
+    <VStack gap={{ base: "6", smDown: "4" }}>
       <Header
         userName={userName}
         userIcon={userIcon}

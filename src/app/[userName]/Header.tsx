@@ -77,7 +77,7 @@ export const Header = ({
     <HStack
       alignSelf="stretch"
       justifyContent="space-between"
-      padding={{ smDown: "2", base: "0" }}
+      paddingInline={{ smDown: "4", base: "0" }}
     >
       <HStack alignItems="center">
         <Link href={`/${userName}`}>

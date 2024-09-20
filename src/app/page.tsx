@@ -21,23 +21,22 @@ export default async function Home() {
   return (
     <VStack
       alignItems="center"
-      paddingTop={{ smDown: "0", base: "4" }}
-      paddingBottom="12"
+      paddingTop="8"
+      paddingBottom="8"
       paddingInline="4"
       gap="7"
     >
       <Link href="/">
-        <Text as="h1" fontSize="2xl">
+        <Text as="h1" fontSize="3xl">
           <HStack>
-            <LibraryBigIcon />
+            <LibraryBigIcon size="1em" />
             ato de yomu
           </HStack>
         </Text>
       </Link>
       <Text fontSize="xl">
-        <b>ato de yomu</b> is a reading list app that lets you save web pages to
-        read later. You can choose to keep your list private or share it with
-        others.
+        Save web pages to read later, track your reading history, and share your
+        lists—or keep them private.
       </Text>
       <Link href="/api/auth/signin">
         <Button variant="outline" size="xl">

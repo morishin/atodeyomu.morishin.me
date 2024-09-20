@@ -81,7 +81,8 @@ export const PageListItem = ({
     <a key={page.id} href={page.url}>
       <HStack
         alignItems="flex-start"
-        padding="2"
+        paddingBlock="2"
+        paddingInline={{ smDown: "4", base: "0" }}
         cursor="pointer"
         borderRadius="lg"
         _hover={{ bgColor: "gray.3" }}

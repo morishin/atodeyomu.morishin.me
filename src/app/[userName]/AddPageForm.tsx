@@ -35,7 +35,7 @@ export function AddPageForm({
   const [isAddButtonEnabled, setIsAddButtonEnabled] = useState(false);
 
   return (
-    <Box width="100%" padding={{ smDown: "2", base: "0" }}>
+    <Box width="100%" paddingInline={{ smDown: "4", base: "0" }}>
       <form action={action}>
         <HStack>
           <Field.Root flex="1">
