@@ -9,7 +9,10 @@ import useSWRInfinite from "swr/infinite";
 import { AddPageForm } from "@/app/[userName]/AddPageForm";
 import { Header } from "@/app/[userName]/Header";
 import { PageList } from "@/app/[userName]/PageList";
-import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
+import {
+  apiUserPageDefaultPerPage,
+  type ApiUserPageResponse,
+} from "@/app/api/users/[userName]/pages/fetchPages";
 import { Tabs } from "@/components/park-ui";
 import { Button } from "@/components/park-ui/button";
 import { Toast } from "@/components/park-ui/toast";
@@ -17,8 +20,6 @@ import { HStack, VStack } from "@styled-system/jsx";
 import { LoggedInUser } from "@/lib/types";
 
 type Page = ApiUserPageResponse[number];
-
-const perPage = 20;
 
 const fetcher: (url: string) => Promise<ApiUserPageResponse> = (url: string) =>
   fetch(url).then((r) => r.json());
@@ -35,37 +36,46 @@ export const Content = ({
   isMyPage,
   loggedInUser,
   isPrivate,
+  initialPageData,
 }: {
   userName: string;
   userIcon: string | null;
   loggedInUser: LoggedInUser | null;
   isMyPage: boolean;
   isPrivate: boolean;
+  initialPageData: {
+    unread: Page[];
+    read: Page[];
+  };
 }) => {
   const getKeyUnread = (pageIndex: number, previousPageData: Page[]) => {
     if (previousPageData && !previousPageData.length) return null;
-    return `/api/users/${userName}/pages?perPage=${perPage}&page=${pageIndex + 1}`;
+    return `/api/users/${userName}/pages?perPage=${apiUserPageDefaultPerPage}&page=${pageIndex + 1}`;
   };
   const unreadData = useSWRInfinite(getKeyUnread, fetcher, {
     revalidateOnFocus: false,
     revalidateIfStale: false,
     revalidateFirstPage: false,
+    fallbackData: [initialPageData.unread],
   });
 
   const getKeyRead = (pageIndex: number, previousPageData: Page[]) => {
     if (previousPageData && !previousPageData.length) return null;
-    return `/api/users/${userName}/pages?perPage=${perPage}&page=${pageIndex + 1}&read=1`;
+    return `/api/users/${userName}/pages?perPage=${apiUserPageDefaultPerPage}&page=${pageIndex + 1}&read=1`;
   };
   const readData = useSWRInfinite(getKeyRead, fetcher, {
     revalidateOnFocus: false,
     revalidateIfStale: false,
     revalidateFirstPage: false,
+    fallbackData: [initialPageData.read],
   });
 
   const showLoadMoreUnread =
-    (unreadData.data?.[unreadData.data.length - 1]?.length ?? 0) === perPage;
+    (unreadData.data?.[unreadData.data.length - 1]?.length ?? 0) ===
+    apiUserPageDefaultPerPage;
   const showLoadMoreRead =
-    (readData.data?.[readData.data.length - 1]?.length ?? 0) === perPage;
+    (readData.data?.[readData.data.length - 1]?.length ?? 0) ===
+    apiUserPageDefaultPerPage;
 
   const pathname = usePathname();
 

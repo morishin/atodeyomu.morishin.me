@@ -2,7 +2,11 @@ import { notFound } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 
 import { Content } from "@/app/[userName]/Content";
-import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
+import {
+  apiUserPageDefaultPerPage,
+  fetchPages,
+  type ApiUserPageResponse,
+} from "@/app/api/users/[userName]/pages/fetchPages";
 import { authConfig } from "@/lib/auth/auth.config";
 import { prisma } from "@/lib/prisma";
 import { VStack } from "@styled-system/jsx";
@@ -74,6 +78,26 @@ export default async function Page({
     };
   }
 
+  const [unreadPages, readPages] = await Promise.all([
+    fetchPages({
+      userId: user.id,
+      isRead: false,
+      perPage: apiUserPageDefaultPerPage,
+      page: 1,
+    }),
+    fetchPages({
+      userId: user.id,
+      isRead: true,
+      perPage: apiUserPageDefaultPerPage,
+      page: 1,
+    }),
+  ]);
+
+  const initialPageData = {
+    unread: unreadPages,
+    read: readPages,
+  };
+
   return (
     <VStack
       alignItems="stretch"
@@ -86,6 +110,7 @@ export default async function Page({
         loggedInUser={loggedInUser}
         isPrivate={isPrivate}
         isMyPage={isMyPage}
+        initialPageData={initialPageData}
       />
     </VStack>
   );

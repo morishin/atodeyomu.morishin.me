@@ -1,7 +1,7 @@
 import { SWRInfiniteResponse } from "swr/infinite";
 import { CreateToasterReturn } from "@ark-ui/react";
 
-import { ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
+import { ApiUserPageResponse } from "@/app/api/users/[userName]/pages/fetchPages";
 import { Text } from "@/components/park-ui";
 import { VStack } from "@styled-system/jsx";
 import { Button } from "@/components/park-ui/button";

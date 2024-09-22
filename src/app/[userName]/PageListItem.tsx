@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { Button } from "@/components/park-ui/button";
 import { HStack, VStack, Box } from "@styled-system/jsx";
 import { Text } from "@/components/park-ui";
-import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/route";
+import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/fetchPages";
 import { requestReadPage } from "@/app/[userName]/ReadPageFormAction";
 import { requestDeletePage } from "@/app/[userName]/DeletePageFormAction";
 import { requestAddToMyUnread } from "@/app/[userName]/AddToMyUnreadFormAction";

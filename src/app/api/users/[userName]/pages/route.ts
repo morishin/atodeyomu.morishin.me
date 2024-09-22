@@ -5,17 +5,7 @@ import { getServerSession } from "next-auth/next";
 import { authConfig } from "@/lib/auth/auth.config";
 import { prisma } from "@/lib/prisma";
 import { PageInfo } from "@/lib/PageInfo";
-
-export type ApiUserPageResponse = {
-  id: string;
-  userId: string;
-  url: string;
-  title: string;
-  description: string;
-  image: string | null;
-  readAt: string | null;
-  createdAt: string;
-}[];
+import { fetchPages } from "@/app/api/users/[userName]/pages/fetchPages";
 
 export async function GET(
   request: NextRequest,
@@ -38,21 +28,11 @@ export async function GET(
     100,
     Math.max(1, Number(searchParams.get("perPage")))
   );
-  const pages = await prisma.page.findMany({
-    where: {
-      userId: user.id,
-      readAt: isRead ? { not: null } : null,
-    },
-    orderBy: [
-      {
-        readAt: "desc",
-      },
-      {
-        createdAt: "desc",
-      },
-    ],
-    skip: isNaN(page) ? 0 : (page - 1) * perPage,
-    take: perPage,
+  const pages = await fetchPages({
+    userId: user.id,
+    isRead,
+    perPage,
+    page,
   });
 
   return new Response(JSON.stringify(pages, null, 2), {

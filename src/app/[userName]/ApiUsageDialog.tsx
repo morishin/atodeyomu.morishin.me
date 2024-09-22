@@ -175,7 +175,7 @@ export const ApiUsageDialog = ({
                   <Text as="span">Download the shortcut.</Text>
                   <Box marginLeft="5">
                     <a
-                      href="https://www.icloud.com/shortcuts/9c584a6c7a8b407ea20248293dd61c42"
+                      href="https://www.icloud.com/shortcuts/49d2a7898efe4f8b86406fb58a58fa1c"
                       target="_blank"
                     >
                       <Button variant="subtle">
