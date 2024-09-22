@@ -153,7 +153,12 @@ export const ApiUsageDialog = ({
                 </Clipboard.Control>
               </Clipboard.Root>
             </VStack>
-            <Stack gap="1">
+            <Stack
+              gap="1"
+              paddingBottom="6"
+              borderBottomWidth="1"
+              borderBottomColor="gray.8"
+            >
               <Text as="h3" size="md" fontWeight="semibold">
                 Add a page via iOS share sheet
               </Text>
@@ -210,6 +215,67 @@ export const ApiUsageDialog = ({
                       src="/share_sheet.png"
                       width="609"
                       height="282"
+                      alt=""
+                    />
+                  </Box>
+                </li>
+              </ol>
+            </Stack>
+            <Stack gap="1">
+              <Text as="h3" size="md" fontWeight="semibold">
+                Add a page via <a href="https://www.alfredapp.com/">Alfred</a>{" "}
+                Workflow
+              </Text>
+              <Dialog.Description>
+                You can add a page by using Alfred Workflow.
+              </Dialog.Description>
+              <ol
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1em",
+                  listStyleType: "decimal",
+                  listStylePosition: "inside",
+                  lineHeight: "2",
+                  paddingTop: "0.5em",
+                }}
+              >
+                <li>
+                  <Text as="span">Download the Alfred Workflow.</Text>
+                  <Box marginLeft="5">
+                    <a href="/atodeyomu.alfredworkflow">
+                      <Button variant="subtle">
+                        <Image
+                          src="/alfred.png"
+                          width="32"
+                          height="26"
+                          alt=""
+                        />
+                        Download
+                      </Button>
+                    </a>
+                  </Box>
+                </li>
+                <li>
+                  <Text as="span">Setup the workflow</Text>
+                  <Box marginLeft="5">
+                    <Image
+                      src="/import_alfred.png"
+                      width="562"
+                      height="250"
+                      alt=""
+                    />
+                  </Box>
+                </li>
+                <li>
+                  <Text as="span">
+                    Run the workflow with the URL you want to add.
+                  </Text>
+                  <Box marginLeft="5">
+                    <Image
+                      src="/execute_alfred.png"
+                      width="764"
+                      height="172"
                       alt=""
                     />
                   </Box>
