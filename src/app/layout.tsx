@@ -1,5 +1,8 @@
-import type { Metadata } from "next";
 import "./globals.css";
+
+import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import ClientSessionProvider from "@/components/ClientSessionProvider";
 import { auth } from "@/lib/auth/auth";
@@ -43,6 +46,8 @@ export default async function RootLayout({
             </VStack>
           </VStack>
         </ClientSessionProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
