@@ -1,18 +1,17 @@
-import { redirect } from "next/navigation";
 import { ArrowRightIcon, LibraryBigIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { getServerSession } from "next-auth/next";
+import { redirect } from "next/navigation";
 
 import { Text } from "@/components/park-ui";
-import { redirectToWelcomePageIfNeeded } from "@/lib/redirects";
-import { HStack, VStack } from "@styled-system/jsx";
 import { Button } from "@/components/park-ui/button";
 import { Card } from "@/components/park-ui/card";
-import { authConfig } from "@/lib/auth/auth.config";
+import { redirectToWelcomePageIfNeeded } from "@/lib/redirects";
+import { HStack, VStack } from "@styled-system/jsx";
+import { auth } from "@/lib/auth/auth";
 
 export default async function Home() {
-  const session = await getServerSession(authConfig);
+  const session = await auth();
   if (session?.user?.name) {
     await redirectToWelcomePageIfNeeded(session);
     redirect(`/${session.user.name}`);

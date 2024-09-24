@@ -2,10 +2,8 @@
 
 import { randomBytes } from "node:crypto";
 
-import { getServerSession } from "next-auth/next";
-
 import { prisma } from "@/lib/prisma";
-import { authConfig } from "@/lib/auth/auth.config";
+import { auth } from "@/lib/auth/auth";
 
 type AccessTokenRotateFormResponse = {
   state: "idle" | "success" | "error";
@@ -16,7 +14,7 @@ type AccessTokenRotateFormResponse = {
 export async function requestAccessTokenRotate(
   prevState: AccessTokenRotateFormResponse
 ): Promise<AccessTokenRotateFormResponse> {
-  const session = await await getServerSession(authConfig);
+  const session = await auth();
   if (!session?.user?.id) {
     return {
       state: "error",

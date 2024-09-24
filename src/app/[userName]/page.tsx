@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { getServerSession } from "next-auth/next";
 
 import { Content } from "@/app/[userName]/Content";
 import {
@@ -7,11 +6,11 @@ import {
   fetchPages,
   type ApiUserPageResponse,
 } from "@/app/api/users/[userName]/pages/fetchPages";
-import { authConfig } from "@/lib/auth/auth.config";
+import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
-import { VStack } from "@styled-system/jsx";
 import { redirectToWelcomePageIfNeeded } from "@/lib/redirects";
 import { LoggedInUser } from "@/lib/types";
+import { VStack } from "@styled-system/jsx";
 
 type Page = ApiUserPageResponse[number];
 
@@ -57,7 +56,7 @@ export default async function Page({
   const user = await prisma.user.findUniqueOrThrow({
     where: { name: userName },
   });
-  const session = await getServerSession(authConfig);
+  const session = await auth();
   await redirectToWelcomePageIfNeeded(session);
 
   const isMyPage = session?.user?.id === user.id;

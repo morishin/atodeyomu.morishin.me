@@ -1,11 +1,10 @@
-import { type NextRequest } from "next/server";
 import { notFound } from "next/navigation";
-import { getServerSession } from "next-auth/next";
+import { type NextRequest } from "next/server";
 
-import { authConfig } from "@/lib/auth/auth.config";
-import { prisma } from "@/lib/prisma";
-import { PageInfo } from "@/lib/PageInfo";
 import { fetchPages } from "@/app/api/users/[userName]/pages/fetchPages";
+import { auth } from "@/lib/auth/auth";
+import { PageInfo } from "@/lib/PageInfo";
+import { prisma } from "@/lib/prisma";
 
 export async function GET(
   request: NextRequest,
@@ -15,7 +14,7 @@ export async function GET(
     where: { name: params.userName },
   });
   if (user.private) {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
     if (session?.user?.id !== user.id) {
       notFound();
     }

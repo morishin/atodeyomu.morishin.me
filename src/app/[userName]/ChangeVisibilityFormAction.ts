@@ -1,9 +1,7 @@
 "use server";
 
-import { getServerSession } from "next-auth/next";
-
+import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
-import { authConfig } from "@/lib/auth/auth.config";
 
 type ChangeVisibilityFormResponse = {
   state: "idle" | "success" | "error";
@@ -14,7 +12,7 @@ export async function requestChangeVisibility(
   _prevState: ChangeVisibilityFormResponse,
   formData: FormData
 ): Promise<ChangeVisibilityFormResponse> {
-  const session = await getServerSession(authConfig);
+  const session = await auth();
   if (!session?.user?.id) {
     return { state: "error", timestamp: Date.now() };
   }

@@ -1,12 +1,11 @@
 import { notFound, redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
 
 import { WelcomeForm } from "@/app/welcome/WelcomeForm";
-import { authConfig } from "@/lib/auth/auth.config";
+import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 
 export default async function Page() {
-  const session = await getServerSession(authConfig);
+  const session = await auth();
   const userId = session?.user?.id;
   if (!userId) {
     notFound();

@@ -1,9 +1,7 @@
 "use server";
 
-import { getServerSession } from "next-auth/next";
-
+import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
-import { authConfig } from "@/lib/auth/auth.config";
 
 type AddToMyUnreadFormResponse = {
   state: "idle" | "success" | "error";
@@ -14,7 +12,7 @@ export async function requestAddToMyUnread(
   _prevState: AddToMyUnreadFormResponse,
   formData: FormData
 ): Promise<AddToMyUnreadFormResponse> {
-  const session = await getServerSession(authConfig);
+  const session = await auth();
   if (!session?.user?.id) {
     return { state: "error", timestamp: Date.now() };
   }

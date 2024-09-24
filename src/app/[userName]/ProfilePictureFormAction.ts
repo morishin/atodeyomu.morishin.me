@@ -2,9 +2,8 @@
 
 import { put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
-import { getServerSession } from "next-auth/next";
 
-import { authConfig } from "@/lib/auth/auth.config";
+import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 
 type ProfilePictureFormResponse = {
@@ -16,7 +15,7 @@ export async function requestProfilePicture(
   _prevState: ProfilePictureFormResponse,
   formData: FormData
 ): Promise<ProfilePictureFormResponse> {
-  const session = await getServerSession(authConfig);
+  const session = await auth();
   if (!session?.user) {
     return { state: "error", timestamp: Date.now() };
   }
