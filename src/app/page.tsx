@@ -25,14 +25,19 @@ export default async function Home() {
       paddingInline="4"
       gap="7"
     >
-      <Link href="/">
-        <Text as="h1" fontSize="3xl">
-          <HStack>
-            <LibraryBigIcon size="1em" />
-            ato de yomu
-          </HStack>
+      <VStack gap="1">
+        <Link href="/">
+          <Text as="h1" fontSize="3xl">
+            <HStack>
+              <LibraryBigIcon size="1em" />
+              ato de yomu
+            </HStack>
+          </Text>
+        </Link>
+        <Text fontSize="xs" color="fg.subtle">
+          /äto de jomɯ/
         </Text>
-      </Link>
+      </VStack>
       <Text fontSize="xl">
         Save web pages to read later, track your reading history, and share your
         lists—or keep them private.
