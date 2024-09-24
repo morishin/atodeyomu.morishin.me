@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 
 import { Content } from "@/app/[userName]/Content";
 import {
-  apiUserPageDefaultPerPage,
   fetchPages,
   type ApiUserPageResponse,
 } from "@/app/api/users/[userName]/pages/fetchPages";
@@ -11,6 +10,7 @@ import { prisma } from "@/lib/prisma";
 import { redirectToWelcomePageIfNeeded } from "@/lib/redirects";
 import { LoggedInUser } from "@/lib/types";
 import { VStack } from "@styled-system/jsx";
+import { apiUserPageDefaultPerPage } from "@/app/api/users/[userName]/pages/apiUserPageDefaultPerPage";
 
 type Page = ApiUserPageResponse[number];
 

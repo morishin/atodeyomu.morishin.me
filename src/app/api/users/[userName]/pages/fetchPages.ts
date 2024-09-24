@@ -11,8 +11,6 @@ export type ApiUserPageResponse = {
   createdAt: string;
 }[];
 
-export const apiUserPageDefaultPerPage = 20;
-
 export const fetchPages = async ({
   userId,
   isRead,

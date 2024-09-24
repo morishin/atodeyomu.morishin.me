@@ -9,15 +9,13 @@ import useSWRInfinite from "swr/infinite";
 import { AddPageForm } from "@/app/[userName]/AddPageForm";
 import { Header } from "@/app/[userName]/Header";
 import { PageList } from "@/app/[userName]/PageList";
-import {
-  apiUserPageDefaultPerPage,
-  type ApiUserPageResponse,
-} from "@/app/api/users/[userName]/pages/fetchPages";
+import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/fetchPages";
 import { Tabs } from "@/components/park-ui";
 import { Button } from "@/components/park-ui/button";
 import { Toast } from "@/components/park-ui/toast";
 import { HStack, VStack } from "@styled-system/jsx";
 import { LoggedInUser } from "@/lib/types";
+import { apiUserPageDefaultPerPage } from "@/app/api/users/[userName]/pages/apiUserPageDefaultPerPage";
 
 type Page = ApiUserPageResponse[number];
 
