@@ -10,10 +10,12 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { userName: string } }
 ) {
-  const user = await prisma.user.findUniqueOrThrow({
+  const user = await prisma.user.findUnique({
     where: { name: params.userName },
   });
-  if (user.private) {
+  if (!user) {
+    notFound();
+  } else if (user.private) {
     const session = await auth();
     if (session?.user?.id !== user.id) {
       notFound();
@@ -46,9 +48,12 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { userName: string } }
 ) {
-  const user = await prisma.user.findUniqueOrThrow({
+  const user = await prisma.user.findUnique({
     where: { name: params.userName },
   });
+  if (!user) {
+    notFound();
+  }
 
   const authorization = request.headers.get("authorization");
   const token = authorization?.replace("Bearer ", "");

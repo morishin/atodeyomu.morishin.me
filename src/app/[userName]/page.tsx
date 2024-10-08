@@ -21,12 +21,19 @@ export async function generateMetadata({
   params: { userName: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  if (userName.match(/[^a-zA-Z0-9_-]/)) {
+    notFound();
+  }
+
   const isRead = searchParams.read === "1";
   const title = `${userName}'s ${isRead ? "reads" : "unreads"} | ato de yomu`;
 
   const user = await prisma.user.findUnique({
     where: { name: userName },
   });
+  if (!user) {
+    notFound();
+  }
 
   return {
     title,
@@ -53,9 +60,15 @@ export default async function Page({
   params: { userName: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const user = await prisma.user.findUniqueOrThrow({
+  if (userName.match(/[^a-zA-Z0-9_-]/)) {
+    notFound();
+  }
+  const user = await prisma.user.findUnique({
     where: { name: userName },
   });
+  if (!user) {
+    notFound();
+  }
   const session = await auth();
   await redirectToWelcomePageIfNeeded(session);
 

@@ -60,7 +60,7 @@ export const WelcomeForm = ({ currentName }: { currentName: string }) => {
                 name="name"
                 placeholder="your_name"
                 required={true}
-                defaultValue={currentName}
+                defaultValue={userName ?? currentName}
                 disabled={isPending}
                 bgColor="white"
               />

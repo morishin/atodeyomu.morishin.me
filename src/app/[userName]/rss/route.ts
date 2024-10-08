@@ -10,7 +10,7 @@ export async function GET(
 ) {
   const isRead = Boolean(Number(request.nextUrl.searchParams.get("read")));
 
-  const user = await prisma.user.findUniqueOrThrow({
+  const user = await prisma.user.findUnique({
     where: { name: params.userName },
     include: {
       pages: {
@@ -28,7 +28,7 @@ export async function GET(
       },
     },
   });
-  if (user.private) {
+  if (!user || user.private) {
     notFound();
   }
 

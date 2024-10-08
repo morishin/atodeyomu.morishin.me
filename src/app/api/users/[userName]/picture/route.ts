@@ -15,10 +15,12 @@ export async function POST(
   if (!session?.user) {
     return NextResponse.json(null, { status: 401 });
   }
-  const user = await prisma.user.findUniqueOrThrow({
+  const user = await prisma.user.findUnique({
     where: { name: params.userName },
   });
-  if (session.user.id !== user.id) {
+  if (!user) {
+    return NextResponse.json(null, { status: 404 });
+  } else if (session.user.id !== user.id) {
     return NextResponse.json(null, { status: 403 });
   }
 

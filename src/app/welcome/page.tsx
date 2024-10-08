@@ -10,10 +10,13 @@ export default async function Page() {
   if (!userId) {
     notFound();
   }
-  const user = await prisma.user.findUniqueOrThrow({
+  const user = await prisma.user.findUnique({
     where: { id: userId },
     include: { pages: true },
   });
+  if (!user) {
+    notFound();
+  }
   if (user.pages.length > 0 || user.registerCompleted) {
     redirect(`/${user.name}`);
   }
