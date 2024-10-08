@@ -8,9 +8,30 @@ type PageInfo = {
 
 const PageInfo = {
   fetch: async (url: string) => {
-    const html = await fetch(url, { headers: { Accept: "text/html" } }).then(
-      (res) => res.text()
-    );
+    let nextUrl: string = url;
+    let html: string | null = null;
+    let cookies: string[] = [];
+    const redirectLimit = 20;
+    for (
+      let redirectCount = 0;
+      redirectCount < redirectLimit;
+      redirectCount++
+    ) {
+      const res = await fetch(nextUrl, {
+        headers: { Accept: "text/html", Cookie: cookies.join("; ") },
+        redirect: "manual", // To follow redirects with cookies
+      });
+      if (res.redirected || (res.status >= 300 && res.status < 400)) {
+        nextUrl = res.url;
+        cookies = res.headers.getSetCookie();
+      } else {
+        html = await res.text();
+        break;
+      }
+    }
+    if (!html) {
+      throw new Error("Failed to fetch HTML");
+    }
 
     const happyDOMWindow = new Window({
       url,
