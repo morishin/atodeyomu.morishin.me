@@ -1,0 +1,26 @@
+{
+  "name": "ato de yomu | Read It Later",
+  "short_name": "ato de yomu",
+  "description": "Save web pages to read later, track your reading history, and share your lists—or keep them private.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#fff",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "share_target": {
+    "action": "/api/pages",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}

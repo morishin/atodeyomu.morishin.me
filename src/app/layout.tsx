@@ -7,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import ClientSessionProvider from "@/components/ClientSessionProvider";
 import { auth } from "@/lib/auth/auth";
 import { VStack } from "@styled-system/jsx";
+import { RegisterWorker } from "@/app/RegisterWorker";
 
 export const metadata: Metadata = {
   title: "ato de yomu | Read It Later",
@@ -28,6 +29,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
   },
+  manifest: "manifest.json",
 };
 
 export default async function RootLayout({
@@ -36,6 +38,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+
   return (
     <html lang="en">
       <body>
@@ -48,6 +51,7 @@ export default async function RootLayout({
         </ClientSessionProvider>
         <Analytics />
         <SpeedInsights />
+        <RegisterWorker />
       </body>
     </html>
   );
