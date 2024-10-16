@@ -3,7 +3,7 @@
 import { CircleCheckIcon, CircleXIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import useSWRInfinite from "swr/infinite";
 
 import { AddPageForm } from "@/app/[userName]/AddPageForm";
@@ -90,6 +90,16 @@ export const Content = ({
 
   const searchParams = useSearchParams();
   const currentTab = searchParams.get("read") === "1" ? "read" : "unread";
+  const newPageAdded = searchParams.get("newPageAdded") === "1";
+
+  useEffect(() => {
+    if (newPageAdded) {
+      toaster.create({
+        title: "Added to unread",
+        type: "success",
+      });
+    }
+  }, [newPageAdded]);
 
   return (
     <VStack gap={{ base: "6", smDown: "4" }}>

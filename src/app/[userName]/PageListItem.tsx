@@ -183,7 +183,7 @@ export const PageListItem = ({
             >
               <PlusIcon />
               <Box display={{ base: "inline", smDown: "none" }}>
-                Add to my unread
+                Add to your unread
               </Box>
               <Box display={{ base: "none", smDown: "inline" }}>Add</Box>
             </Button>

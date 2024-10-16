@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { redirect } from "next/navigation";
 
 import { PageInfo } from "@/lib/PageInfo";
 import { prisma } from "@/lib/prisma";
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
     return new Response(`Failed to load page: ${url}`, { status: 400 });
   }
 
-  const page = await prisma.page.upsert({
+  await prisma.page.upsert({
     select: {
       id: true,
       url: true,
@@ -53,10 +54,5 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  return new Response(JSON.stringify(page, null, 2), {
-    status: 201,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  redirect(`/${session.user.name}?newPageAdded=1`);
 }
