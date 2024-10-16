@@ -7,7 +7,7 @@ import { Text } from "@/components/park-ui";
 import { Button } from "@/components/park-ui/button";
 import { Card } from "@/components/park-ui/card";
 import { redirectToWelcomePageIfNeeded } from "@/lib/redirects";
-import { HStack, VStack } from "@styled-system/jsx";
+import { HStack, Stack, VStack } from "@styled-system/jsx";
 import { auth } from "@/lib/auth/auth";
 
 export default async function Home() {
@@ -42,12 +42,19 @@ export default async function Home() {
         Save web pages to read later, track your reading history, and share your
         lists—or keep them private.
       </Text>
-      <Link href="/api/auth/signin">
-        <Button variant="outline" size="xl">
-          Get Started
-          <ArrowRightIcon />
-        </Button>
-      </Link>
+      <Stack gap="4" flexDirection={{ base: "row", smDown: "column" }}>
+        <Link href="/api/auth/signin">
+          <Button variant="solid" size="xl" width={{ smDown: "100%" }}>
+            Get Started
+            <ArrowRightIcon />
+          </Button>
+        </Link>
+        <Link href="/morishin">
+          <Button variant="outline" size="xl" width={{ smDown: "100%" }}>
+            View Example List
+          </Button>
+        </Link>
+      </Stack>
       <Card.Root maxWidth="625px" marginTop="4">
         <Image
           width="1250"
