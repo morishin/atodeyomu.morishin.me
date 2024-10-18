@@ -1,9 +1,14 @@
 "use client";
 
-import { CircleCheckIcon, CircleXIcon, XIcon } from "lucide-react";
+import {
+  CheckCheckIcon,
+  CircleCheckIcon,
+  CircleXIcon,
+  XIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { useActionState, useCallback, useEffect } from "react";
 import useSWRInfinite from "swr/infinite";
 
 import { AddPageForm } from "@/app/[userName]/AddPageForm";
@@ -13,9 +18,10 @@ import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/fetch
 import { Tabs } from "@/components/park-ui";
 import { Button } from "@/components/park-ui/button";
 import { Toast } from "@/components/park-ui/toast";
-import { HStack, VStack } from "@styled-system/jsx";
+import { Box, HStack, VStack } from "@styled-system/jsx";
 import { LoggedInUser } from "@/lib/types";
 import { apiUserPageDefaultPerPage } from "@/app/api/users/[userName]/pages/apiUserPageDefaultPerPage";
+import { requestMarkAllAsRead } from "@/app/[userName]/MarkAllAsReadFormAction";
 
 type Page = ApiUserPageResponse[number];
 
@@ -90,8 +96,8 @@ export const Content = ({
 
   const searchParams = useSearchParams();
   const currentTab = searchParams.get("read") === "1" ? "read" : "unread";
-  const newPageAdded = searchParams.get("newPageAdded") === "1";
 
+  const newPageAdded = searchParams.get("newPageAdded") === "1";
   useEffect(() => {
     if (newPageAdded) {
       toaster.create({
@@ -100,6 +106,24 @@ export const Content = ({
       });
     }
   }, [newPageAdded]);
+
+  const [
+    { state: markAllAsReadState, timestamp: markAllAsReadTimestamp },
+    markAllAsReadAction,
+    isMarkAllAsReadPending,
+  ] = useActionState(requestMarkAllAsRead, {
+    state: "idle",
+    timestamp: Date.now(),
+  } as const);
+  useEffect(() => {
+    if (markAllAsReadState === "success") {
+      refresh();
+      toaster.create({
+        title: "Marked all as read",
+        type: "success",
+      });
+    }
+  }, [markAllAsReadState, refresh, markAllAsReadTimestamp]);
 
   return (
     <VStack gap={{ base: "6", smDown: "4" }}>
@@ -113,19 +137,49 @@ export const Content = ({
       />
       {isMyPage ? <AddPageForm refresh={refresh} toaster={toaster} /> : null}
       <Tabs.Root value={currentTab}>
-        <Tabs.List>
-          <Link href={pathname}>
-            <Tabs.Trigger key={"unread"} value={"unread"}>
-              Unread
-            </Tabs.Trigger>
-          </Link>
-          <Link href="?read=1">
-            <Tabs.Trigger key={"read"} value={"read"}>
-              Read
-            </Tabs.Trigger>
-          </Link>
-          <Tabs.Indicator />
-        </Tabs.List>
+        <HStack>
+          <Tabs.List flex="1">
+            <Link href={pathname}>
+              <Tabs.Trigger key={"unread"} value={"unread"}>
+                Unread
+              </Tabs.Trigger>
+            </Link>
+            <Link href="?read=1">
+              <Tabs.Trigger key={"read"} value={"read"}>
+                Read
+              </Tabs.Trigger>
+            </Link>
+            <Tabs.Indicator />
+            <Box
+              display={
+                unreadData.data?.[0]?.length !== 0 && currentTab === "unread"
+                  ? "block"
+                  : "none"
+              }
+              marginRight={{ smDown: "4" }}
+              marginLeft="auto"
+            >
+              <form
+                action={markAllAsReadAction}
+                onSubmit={(e) => {
+                  if (!confirm("Are you sure you want to mark all as read?")) {
+                    e.preventDefault();
+                  }
+                }}
+              >
+                <Button
+                  type="submit"
+                  size="xs"
+                  variant="subtle"
+                  loading={isMarkAllAsReadPending}
+                >
+                  <CheckCheckIcon color="green" />
+                  Mark all as read
+                </Button>
+              </form>
+            </Box>
+          </Tabs.List>
+        </HStack>
         <Tabs.Content value="unread">
           <PageList
             data={unreadData.data}
@@ -137,6 +191,11 @@ export const Content = ({
             showLoadMore={showLoadMoreUnread}
             refresh={refresh}
             toaster={toaster}
+            emptyMessage={
+              readData.data?.[0]?.length === 0
+                ? "No pages have been added yet."
+                : "All done!"
+            }
           />
         </Tabs.Content>
         <Tabs.Content value="read">
@@ -150,6 +209,7 @@ export const Content = ({
             showLoadMore={showLoadMoreRead}
             refresh={refresh}
             toaster={toaster}
+            emptyMessage="No pages have been done yet."
           />
         </Tabs.Content>
       </Tabs.Root>

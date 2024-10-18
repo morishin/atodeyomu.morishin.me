@@ -17,6 +17,7 @@ export const PageList = ({
   showLoadMore,
   refresh,
   toaster,
+  emptyMessage,
 }: Pick<
   SWRInfiniteResponse<ApiUserPageResponse>,
   "data" | "size" | "setSize"
@@ -27,6 +28,7 @@ export const PageList = ({
   showLoadMore: boolean;
   refresh: () => Promise<void>;
   toaster: CreateToasterReturn;
+  emptyMessage: string;
 }) => {
   return (
     <VStack alignItems="stretch">
@@ -52,7 +54,7 @@ export const PageList = ({
         </Button>
       ) : data?.[0]?.length === 0 ? (
         <Text paddingTop="6" color="fg.subtle" textAlign="center">
-          No pages have been added yet.
+          {emptyMessage}
         </Text>
       ) : null}
     </VStack>
