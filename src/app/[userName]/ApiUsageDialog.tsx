@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import { Button } from "@/components/park-ui/button";
 import { Dialog } from "@/components/park-ui/dialog";
-import { Box, Stack, VStack } from "@styled-system/jsx";
+import { Box, HStack, Stack, VStack } from "@styled-system/jsx";
 import { Clipboard } from "@/components/park-ui/clipboard";
 import { Input } from "@/components/park-ui/styled/clipboard";
 import { FormLabel } from "@/components/park-ui/form-label";
@@ -218,6 +218,51 @@ export const ApiUsageDialog = ({
                       alt=""
                     />
                   </Box>
+                </li>
+              </ol>
+            </Stack>
+            <Stack
+              gap="1"
+              paddingBottom="6"
+              borderBottomWidth="1"
+              borderBottomColor="gray.8"
+            >
+              <Text as="h3" size="md" fontWeight="semibold">
+                Add a page via Android share menu
+              </Text>
+              <Dialog.Description>
+                You can add a page from the share menu.
+              </Dialog.Description>
+              <ol
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1em",
+                  listStyleType: "decimal",
+                  listStylePosition: "inside",
+                  lineHeight: "2",
+                  paddingTop: "0.5em",
+                }}
+              >
+                <li>
+                  <Text as="span">Add to Home screen. (Install it as PWA)</Text>
+                  <Image
+                    src="/android-share-1.png"
+                    width="948"
+                    height="614"
+                    alt=""
+                  />
+                </li>
+                <li>
+                  <Text as="span">
+                    Available in the share menu from browser.
+                  </Text>
+                  <Image
+                    src="/android-share-2.png"
+                    width="948"
+                    height="614"
+                    alt=""
+                  />
                 </li>
               </ol>
             </Stack>
