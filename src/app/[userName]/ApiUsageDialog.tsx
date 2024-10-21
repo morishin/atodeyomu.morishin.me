@@ -4,11 +4,12 @@ import Image from "next/image";
 
 import { Button } from "@/components/park-ui/button";
 import { Dialog } from "@/components/park-ui/dialog";
-import { Box, HStack, Stack, VStack } from "@styled-system/jsx";
+import { Box, Stack } from "@styled-system/jsx";
 import { Clipboard } from "@/components/park-ui/clipboard";
 import { Input } from "@/components/park-ui/styled/clipboard";
 import { FormLabel } from "@/components/park-ui/form-label";
 import { Textarea } from "@/components/park-ui/textarea";
+import { Collapsible } from "@/components/park-ui/collapsible";
 import { requestAccessTokenRotate } from "@/app/[userName]/AccessTokenRotateFormAction";
 import { LoggedInUser } from "@/lib/types";
 import { Text } from "@/components/park-ui";
@@ -66,7 +67,7 @@ export const ApiUsageDialog = ({
                 You can also add pages to the list via API.
               </Dialog.Description>
             </Stack>
-            <VStack alignItems="stretch">
+            <Stack>
               <Clipboard.Root
                 value={personalAccessToken}
                 paddingBottom="6"
@@ -120,15 +121,9 @@ export const ApiUsageDialog = ({
                   </form>
                 </Clipboard.Control>
               </Clipboard.Root>
-              <Clipboard.Root
-                value={exampleCode}
-                paddingBottom="6"
-                borderBottomWidth="1"
-                borderBottomColor="gray.8"
-              >
-                <Text as="h3" size="md" fontWeight="semibold">
-                  Add a page via cURL
-                </Text>
+            </Stack>
+            <Section title="Add a page via cURL">
+              <Clipboard.Root value={exampleCode}>
                 <Clipboard.Control>
                   <Clipboard.Input asChild>
                     <Textarea
@@ -152,16 +147,8 @@ export const ApiUsageDialog = ({
                   </Clipboard.Trigger>
                 </Clipboard.Control>
               </Clipboard.Root>
-            </VStack>
-            <Stack
-              gap="1"
-              paddingBottom="6"
-              borderBottomWidth="1"
-              borderBottomColor="gray.8"
-            >
-              <Text as="h3" size="md" fontWeight="semibold">
-                Add a page via iOS share sheet
-              </Text>
+            </Section>
+            <Section title="Add a page via iOS share sheet">
               <Dialog.Description>
                 You can add a page from the share sheet by using iOS Shortcuts.
               </Dialog.Description>
@@ -220,16 +207,8 @@ export const ApiUsageDialog = ({
                   </Box>
                 </li>
               </ol>
-            </Stack>
-            <Stack
-              gap="1"
-              paddingBottom="6"
-              borderBottomWidth="1"
-              borderBottomColor="gray.8"
-            >
-              <Text as="h3" size="md" fontWeight="semibold">
-                Add a page via Android share menu
-              </Text>
+            </Section>
+            <Section title="Add a page via Android share menu">
               <Dialog.Description>
                 You can add a page from the share menu.
               </Dialog.Description>
@@ -265,14 +244,77 @@ export const ApiUsageDialog = ({
                   />
                 </li>
               </ol>
-            </Stack>
-            <Stack gap="1">
-              <Text as="h3" size="md" fontWeight="semibold">
-                Add a page via <a href="https://www.alfredapp.com/">Alfred</a>{" "}
-                Workflow
-              </Text>
+            </Section>
+            <Section title="Add a page via Chrome Extension">
               <Dialog.Description>
-                You can add a page by using Alfred Workflow.
+                You can add a page by using a Chrome Extension.
+              </Dialog.Description>
+              <ol
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1em",
+                  listStyleType: "decimal",
+                  listStylePosition: "inside",
+                  lineHeight: "2",
+                  paddingTop: "0.5em",
+                }}
+              >
+                <li>
+                  <Text as="span">Download the Chrome Extension.</Text>
+                  <Box marginLeft="5">
+                    <a
+                      href="https://chromewebstore.google.com/detail/atode-yomu-client/dannfglgdahhnfmofngclkoicbikicgj"
+                      target="_blank"
+                    >
+                      <Button variant="subtle">
+                        <Image
+                          src="/chrome.svg"
+                          width="28"
+                          height="28"
+                          alt=""
+                        />
+                        Download
+                      </Button>
+                    </a>
+                  </Box>
+                </li>
+                <li>
+                  <Text as="span">Setup the extension</Text>
+                  <Box marginLeft="5">
+                    <Image
+                      src="/configure_chrome_extension.png"
+                      width="909"
+                      height="421"
+                      alt=""
+                    />
+                  </Box>
+                </li>
+                <li>
+                  <Text as="span">
+                    Click the extension button on the page you want to add.
+                  </Text>
+                  <Box marginLeft="5">
+                    <Image
+                      src="/usage_chrome_extension.png"
+                      width="591"
+                      height="278"
+                      alt=""
+                    />
+                  </Box>
+                </li>
+              </ol>
+            </Section>
+            <Section title=" Add a page via Alfred Workflow">
+              <Dialog.Description>
+                You can add a page by using{" "}
+                <a
+                  style={{ textDecoration: "underline" }}
+                  href="https://www.alfredapp.com/"
+                >
+                  Alfred
+                </a>{" "}
+                Workflow.
               </Dialog.Description>
               <ol
                 style={{
@@ -288,7 +330,7 @@ export const ApiUsageDialog = ({
                 <li>
                   <Text as="span">Download the Alfred Workflow.</Text>
                   <Box marginLeft="5">
-                    <a href="/atodeyomu.alfredworkflow">
+                    <a href="/atodeyomu.alfredworkflow" target="_blank">
                       <Button variant="subtle">
                         <Image
                           src="/alfred.png"
@@ -326,7 +368,7 @@ export const ApiUsageDialog = ({
                   </Box>
                 </li>
               </ol>
-            </Stack>
+            </Section>
           </Stack>
           <Dialog.CloseTrigger asChild position="absolute" top="2" right="2">
             <Button aria-label="Close Dialog" variant="ghost" size="sm">
@@ -336,5 +378,48 @@ export const ApiUsageDialog = ({
         </Dialog.Content>
       </Dialog.Positioner>
     </Dialog.Root>
+  );
+};
+
+const Section = ({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) => {
+  return (
+    <Stack
+      paddingBottom="2"
+      borderBottomWidth="1"
+      borderBottomColor="gray.8"
+      _last={{
+        border: "none",
+      }}
+    >
+      <Collapsible.Root lazyMount>
+        <Collapsible.Trigger cursor="pointer" asChild>
+          <Text
+            as="h3"
+            size="md"
+            fontWeight="semibold"
+            _before={{
+              content: `"▶"`,
+              display: "inline",
+              marginRight: "1",
+            }}
+            _expanded={{
+              _before: {
+                content: `"▼"`,
+                marginRight: "1",
+              },
+            }}
+          >
+            {title}
+          </Text>
+        </Collapsible.Trigger>
+        <Collapsible.Content>{children}</Collapsible.Content>
+      </Collapsible.Root>
+    </Stack>
   );
 };
