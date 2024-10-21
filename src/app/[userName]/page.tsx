@@ -1,18 +1,13 @@
 import { notFound } from "next/navigation";
 
 import { Content } from "@/app/[userName]/Content";
-import {
-  fetchPages,
-  type ApiUserPageResponse,
-} from "@/app/api/users/[userName]/pages/fetchPages";
+import { fetchPages } from "@/app/api/users/[userName]/pages/fetchPages";
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
 import { redirectToWelcomePageIfNeeded } from "@/lib/redirects";
 import { LoggedInUser } from "@/lib/types";
 import { VStack } from "@styled-system/jsx";
 import { apiUserPageDefaultPerPage } from "@/app/api/users/[userName]/pages/apiUserPageDefaultPerPage";
-
-type Page = ApiUserPageResponse[number];
 
 export async function generateMetadata({
   params: { userName },

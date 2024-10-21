@@ -19,7 +19,7 @@ export const PageListItem = ({
   refresh,
   toaster,
 }: {
-  page: ApiUserPageResponse[number];
+  page: ApiUserPageResponse["pages"][number];
   isRead: boolean;
   isMyPage: boolean;
   refresh: () => Promise<void>;

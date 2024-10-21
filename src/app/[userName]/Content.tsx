@@ -22,8 +22,9 @@ import { Box, HStack, VStack } from "@styled-system/jsx";
 import { LoggedInUser } from "@/lib/types";
 import { apiUserPageDefaultPerPage } from "@/app/api/users/[userName]/pages/apiUserPageDefaultPerPage";
 import { requestMarkAllAsRead } from "@/app/[userName]/MarkAllAsReadFormAction";
+import { Badge } from "@/components/park-ui/badge";
 
-type Page = ApiUserPageResponse[number];
+type Page = ApiUserPageResponse["pages"][number];
 
 const fetcher: (url: string) => Promise<ApiUserPageResponse> = (url: string) =>
   fetch(url).then((r) => r.json());
@@ -48,12 +49,15 @@ export const Content = ({
   isMyPage: boolean;
   isPrivate: boolean;
   initialPageData: {
-    unread: Page[];
-    read: Page[];
+    unread: ApiUserPageResponse;
+    read: ApiUserPageResponse;
   };
 }) => {
-  const getKeyUnread = (pageIndex: number, previousPageData: Page[]) => {
-    if (previousPageData && !previousPageData.length) return null;
+  const getKeyUnread = (
+    pageIndex: number,
+    previousPageData: ApiUserPageResponse
+  ) => {
+    if (previousPageData && !previousPageData.pages.length) return null;
     return `/api/users/${userName}/pages?perPage=${apiUserPageDefaultPerPage}&page=${pageIndex + 1}`;
   };
   const unreadData = useSWRInfinite(getKeyUnread, fetcher, {
@@ -63,8 +67,11 @@ export const Content = ({
     fallbackData: [initialPageData.unread],
   });
 
-  const getKeyRead = (pageIndex: number, previousPageData: Page[]) => {
-    if (previousPageData && !previousPageData.length) return null;
+  const getKeyRead = (
+    pageIndex: number,
+    previousPageData: ApiUserPageResponse
+  ) => {
+    if (previousPageData && !previousPageData.pages.length) return null;
     return `/api/users/${userName}/pages?perPage=${apiUserPageDefaultPerPage}&page=${pageIndex + 1}&read=1`;
   };
   const readData = useSWRInfinite(getKeyRead, fetcher, {
@@ -75,10 +82,10 @@ export const Content = ({
   });
 
   const showLoadMoreUnread =
-    (unreadData.data?.[unreadData.data.length - 1]?.length ?? 0) ===
+    (unreadData.data?.[unreadData.data.length - 1]?.pages.length ?? 0) ===
     apiUserPageDefaultPerPage;
   const showLoadMoreRead =
-    (readData.data?.[readData.data.length - 1]?.length ?? 0) ===
+    (readData.data?.[readData.data.length - 1]?.pages.length ?? 0) ===
     apiUserPageDefaultPerPage;
 
   const pathname = usePathname();
@@ -142,17 +149,24 @@ export const Content = ({
             <Link href={pathname}>
               <Tabs.Trigger key={"unread"} value={"unread"}>
                 Unread
+                <Badge size="sm" variant="subtle">
+                  {unreadData.data?.[0]?.totalCount ?? 0}
+                </Badge>
               </Tabs.Trigger>
             </Link>
             <Link href="?read=1">
               <Tabs.Trigger key={"read"} value={"read"}>
                 Read
+                <Badge size="sm" variant="subtle">
+                  {readData.data?.[0]?.totalCount ?? 0}
+                </Badge>
               </Tabs.Trigger>
             </Link>
             <Tabs.Indicator />
             <Box
               display={
-                unreadData.data?.[0]?.length !== 0 && currentTab === "unread"
+                unreadData.data?.[0]?.pages.length !== 0 &&
+                currentTab === "unread"
                   ? "block"
                   : "none"
               }
@@ -192,7 +206,7 @@ export const Content = ({
             refresh={refresh}
             toaster={toaster}
             emptyMessage={
-              readData.data?.[0]?.length === 0
+              readData.data?.[0]?.pages.length === 0
                 ? "No pages have been added yet."
                 : "All done!"
             }

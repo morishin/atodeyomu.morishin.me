@@ -32,8 +32,8 @@ export const PageList = ({
 }) => {
   return (
     <VStack alignItems="stretch">
-      {data?.map((pages) =>
-        pages.map((page) => (
+      {data?.map((res) =>
+        res.pages.map((page) => (
           <PageListItem
             key={page.id}
             page={page}
@@ -52,7 +52,7 @@ export const PageList = ({
         >
           Load More
         </Button>
-      ) : data?.[0]?.length === 0 ? (
+      ) : data?.[0]?.pages.length === 0 ? (
         <Text paddingTop="6" color="fg.subtle" textAlign="center">
           {emptyMessage}
         </Text>
