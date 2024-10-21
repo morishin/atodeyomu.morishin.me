@@ -23,8 +23,7 @@ import { LoggedInUser } from "@/lib/types";
 import { apiUserPageDefaultPerPage } from "@/app/api/users/[userName]/pages/apiUserPageDefaultPerPage";
 import { requestMarkAllAsRead } from "@/app/[userName]/MarkAllAsReadFormAction";
 import { Badge } from "@/components/park-ui/badge";
-
-type Page = ApiUserPageResponse["pages"][number];
+import { Text } from "@/components/park-ui";
 
 const fetcher: (url: string) => Promise<ApiUserPageResponse> = (url: string) =>
   fetch(url).then((r) => r.json());
@@ -148,7 +147,7 @@ export const Content = ({
           <Tabs.List flex="1">
             <Link href={pathname}>
               <Tabs.Trigger key={"unread"} value={"unread"}>
-                Unread
+                <Text fontSize={{ base: "md", smDown: "sm" }}>Unread</Text>
                 <Badge size="sm" variant="subtle">
                   {unreadData.data?.[0]?.totalCount ?? 0}
                 </Badge>
@@ -156,7 +155,7 @@ export const Content = ({
             </Link>
             <Link href="?read=1">
               <Tabs.Trigger key={"read"} value={"read"}>
-                Read
+                <Text fontSize={{ base: "md", smDown: "sm" }}>Read</Text>
                 <Badge size="sm" variant="subtle">
                   {readData.data?.[0]?.totalCount ?? 0}
                 </Badge>
