@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { type ResolvingMetadata } from "next";
 
 import { Content } from "@/app/[userName]/Content";
 import { fetchPages } from "@/app/api/users/[userName]/pages/fetchPages";
@@ -8,6 +9,8 @@ import { redirectToWelcomePageIfNeeded } from "@/lib/redirects";
 import { LoggedInUser } from "@/lib/types";
 import { VStack } from "@styled-system/jsx";
 import { apiUserPageDefaultPerPage } from "@/app/api/users/[userName]/pages/apiUserPageDefaultPerPage";
+import { locale } from "@/lib/i18n/locale";
+import { i18n } from "@/lib/i18n/strings";
 
 export async function generateMetadata({
   params: { userName },
@@ -20,8 +23,14 @@ export async function generateMetadata({
     notFound();
   }
 
+  const lang = locale();
+
   const isRead = searchParams.read === "1";
-  const title = `${userName}'s ${isRead ? "reads" : "unreads"} | ato de yomu`;
+  const title = `${
+    isRead
+      ? i18n("{{username}}'s reads", lang).replace("{{username}}", userName)
+      : i18n("{{username}}'s unreads", lang).replace("{{username}}", userName)
+  } | ${i18n("ato de yomu", lang)}`;
 
   const user = await prisma.user.findUnique({
     where: { name: userName },
@@ -34,11 +43,14 @@ export async function generateMetadata({
     title,
     openGraph: {
       title,
-      siteName: "ato de yomu",
+      siteName: i18n("ato de yomu", lang),
       type: "website",
       url: `https://atodeyomu.morishin.me/${userName}`,
       images: {
-        url: user?.image ?? "https://atodeyomu.morishin.me/og-image.png",
+        url:
+          user?.image ?? lang === "ja"
+            ? "https://atodeyomu.morishin.me/og-image-ja.png"
+            : "https://atodeyomu.morishin.me/og-image.png",
         width: 630,
         height: 630,
       },

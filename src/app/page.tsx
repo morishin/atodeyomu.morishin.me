@@ -9,6 +9,8 @@ import { Card } from "@/components/park-ui/card";
 import { redirectToWelcomePageIfNeeded } from "@/lib/redirects";
 import { HStack, Stack, VStack } from "@styled-system/jsx";
 import { auth } from "@/lib/auth/auth";
+import { i18n } from "@/lib/i18n/strings";
+import { locale } from "@/lib/i18n/locale";
 
 export default async function Home() {
   const session = await auth();
@@ -16,7 +18,7 @@ export default async function Home() {
     await redirectToWelcomePageIfNeeded(session);
     redirect(`/${session.user.name}`);
   }
-
+  const lang = locale();
   return (
     <VStack
       alignItems="center"
@@ -30,7 +32,7 @@ export default async function Home() {
           <Text as="h1" fontSize="3xl">
             <HStack>
               <LibraryBigIcon size="1em" />
-              ato de yomu
+              {i18n("ato de yomu", lang)}
             </HStack>
           </Text>
         </Link>
@@ -39,19 +41,21 @@ export default async function Home() {
         </Text>
       </VStack>
       <Text fontSize="xl">
-        Save web pages to read later, track your reading history, and share your
-        lists—or keep them private.
+        {i18n(
+          "Save web pages to read later, track your reading history, and share your lists—or keep them private.",
+          lang
+        )}
       </Text>
       <Stack gap="4" flexDirection={{ base: "row", smDown: "column" }}>
         <Link href="/api/auth/signin">
           <Button variant="solid" size="xl" width={{ smDown: "100%" }}>
-            Get Started
+            {i18n("Get Started", lang)}
             <ArrowRightIcon />
           </Button>
         </Link>
         <Link href="/morishin">
           <Button variant="outline" size="xl" width={{ smDown: "100%" }}>
-            View Example List
+            {i18n("See Example", lang)}
           </Button>
         </Link>
       </Stack>

@@ -1,11 +1,13 @@
 import { PlusIcon } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useContext, useEffect, useState } from "react";
 import { CreateToasterReturn } from "@ark-ui/react";
 
 import { requestAddPage } from "@/app/[userName]/AddPageFormAction";
 import { Button } from "@/components/park-ui/button";
 import { Field } from "@/components/park-ui/field";
 import { HStack, Box } from "@styled-system/jsx";
+import { LocaleContext } from "@/lib/i18n/LocaleProvider";
+import { i18n } from "@/lib/i18n/strings";
 
 export function AddPageForm({
   refresh,
@@ -22,15 +24,17 @@ export function AddPageForm({
     } as const
   );
 
+  const { locale } = useContext(LocaleContext);
+
   useEffect(() => {
     if (state === "success") {
       refresh();
       toaster.create({
-        title: "Added to unread",
+        title: i18n("Added to your unread", locale),
         type: "success",
       });
     }
-  }, [state, refresh, timestamp, toaster]);
+  }, [state, refresh, timestamp, toaster, locale]);
 
   const [isAddButtonEnabled, setIsAddButtonEnabled] = useState(false);
 
@@ -58,7 +62,7 @@ export function AddPageForm({
           >
             <PlusIcon />
             <Box display={{ smDown: "none", base: "inline" }}>
-              Add to unread
+              {i18n("Add to unread", locale)}
             </Box>
             <Box display={{ smDown: "inline", base: "none" }}>Add</Box>
           </Button>

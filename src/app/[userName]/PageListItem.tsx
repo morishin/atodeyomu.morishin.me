@@ -1,4 +1,4 @@
-import { useActionState, useEffect } from "react";
+import { useActionState, useContext, useEffect } from "react";
 import { CheckIcon, PlusIcon, UndoIcon, XIcon } from "lucide-react";
 import { CreateToasterReturn } from "@ark-ui/react";
 import Image from "next/image";
@@ -11,6 +11,8 @@ import { type ApiUserPageResponse } from "@/app/api/users/[userName]/pages/fetch
 import { requestReadPage } from "@/app/[userName]/ReadPageFormAction";
 import { requestDeletePage } from "@/app/[userName]/DeletePageFormAction";
 import { requestAddToMyUnread } from "@/app/[userName]/AddToMyUnreadFormAction";
+import { LocaleContext } from "@/lib/i18n/LocaleProvider";
+import { i18n } from "@/lib/i18n/strings";
 
 export const PageListItem = ({
   page,
@@ -27,6 +29,8 @@ export const PageListItem = ({
 }) => {
   const session = useSession();
   const isLoggedin = session.status === "authenticated";
+
+  const { locale } = useContext(LocaleContext);
 
   const [
     { state: readState, timestamp: readTimestamp },
@@ -47,11 +51,13 @@ export const PageListItem = ({
     if (readState === "success") {
       refresh();
       toaster.create({
-        title: isRead ? "Marked as unread" : "Marked as read",
+        title: isRead
+          ? i18n("Marked as unread", locale)
+          : i18n("Marked as read", locale),
         type: "success",
       });
     }
-  }, [readState, refresh, readTimestamp, toaster, isRead]);
+  }, [readState, refresh, readTimestamp, toaster, isRead, locale]);
 
   useEffect(() => {
     if (deleteState === "success") {
@@ -71,11 +77,11 @@ export const PageListItem = ({
   useEffect(() => {
     if (addToMyUnreadState === "success") {
       toaster.create({
-        title: "Added to your unread",
+        title: i18n("Added to your unread", locale),
         type: "success",
       });
     }
-  }, [addToMyUnreadState, toaster, addToMyUnreadTimestamp]);
+  }, [addToMyUnreadState, toaster, addToMyUnreadTimestamp, locale]);
 
   return (
     <a key={page.id} href={page.url}>
@@ -147,7 +153,9 @@ export const PageListItem = ({
               >
                 {isRead ? <UndoIcon /> : <CheckIcon color="green" />}
                 <Box display={{ smDown: "none" }}>
-                  {isRead ? "Mark as unread" : "Mark as read"}
+                  {isRead
+                    ? i18n("Mark as unread", locale)
+                    : i18n("Mark as read", locale)}
                 </Box>
               </Button>
             </form>
@@ -155,7 +163,9 @@ export const PageListItem = ({
               action={deleteAction}
               onSubmit={(e) => {
                 if (
-                  !confirm(`Are you sure to delete this page?\n"${page.title}"`)
+                  !confirm(
+                    `${i18n("Are you sure to delete this page?", locale)}\n"${page.title}"`
+                  )
                 ) {
                   e.preventDefault();
                 }
@@ -183,9 +193,11 @@ export const PageListItem = ({
             >
               <PlusIcon />
               <Box display={{ base: "inline", smDown: "none" }}>
-                Add to your unread
+                {i18n("Add to your unread", locale)}
               </Box>
-              <Box display={{ base: "none", smDown: "inline" }}>Add</Box>
+              <Box display={{ base: "none", smDown: "inline" }}>
+                {i18n("Add", locale)}
+              </Box>
             </Button>
           </form>
         ) : null}

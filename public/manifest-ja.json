@@ -1,0 +1,26 @@
+{
+  "name": "未読に追加",
+  "short_name": "あとで読む",
+  "description": "あとで読みたいウェブページを保存して未読管理したりリストを共有することができるリーディングリストアプリ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#fff",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "share_target": {
+    "action": "/api/pages",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}
