@@ -6,7 +6,7 @@ const strings = {
   },
   "Save web pages to read later, track your reading history, and share your lists—or keep them private.":
     {
-      ja: "あとで読みたいウェブページを保存して未読管理したりリストを共有することができるリーディングリストアプリ",
+      ja: "あとで読みたいウェブページを保存して未読管理したりリストを共有することができるリーディングリストアプリです。",
     },
   "Get Started": {
     ja: "はじめる",
