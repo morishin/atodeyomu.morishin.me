@@ -1,6 +1,6 @@
 import "./globals.css";
 
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -8,29 +8,48 @@ import ClientSessionProvider from "@/components/ClientSessionProvider";
 import { auth } from "@/lib/auth/auth";
 import { VStack } from "@styled-system/jsx";
 import { RegisterWorker } from "@/app/RegisterWorker";
+import LocaleProvider from "@/lib/i18n/LocaleProvider";
+import { locale } from "@/lib/i18n/locale";
+import { i18n } from "@/lib/i18n/strings";
 
-export const metadata: Metadata = {
-  title: "ato de yomu | Read It Later",
-  description:
-    "Save web pages to read later, track your reading history, and share your lists—or keep them private.",
-  openGraph: {
-    title: "ato de yomu | Read It Later",
-    siteName: "ato de yomu",
-    description:
-      "Save web pages to read later, track your reading history, and share your lists—or keep them private.",
-    type: "website",
-    url: "https://atodeyomu.morishin.me",
-    images: {
-      url: "https://atodeyomu.morishin.me/og-image.png",
-      width: 630,
-      height: 630,
-    },
-  },
-  twitter: {
-    card: "summary",
-  },
-  manifest: "manifest.json",
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
+export async function generateMetadata(
+  _props: Props,
+  _parent: ResolvingMetadata
+): Promise<Metadata> {
+  const lang = locale();
+  const title = i18n("ato de yomu", lang);
+  const description = i18n(
+    "Save web pages to read later, track your reading history, and share your lists—or keep them private.",
+    lang
+  );
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      siteName: title,
+      description,
+      type: "website",
+      url: "https://atodeyomu.morishin.me",
+      images: {
+        url:
+          lang === "ja"
+            ? "https://atodeyomu.morishin.me/og-image-ja.png"
+            : "https://atodeyomu.morishin.me/og-image.png",
+        width: 630,
+        height: 630,
+      },
+    },
+    twitter: {
+      card: "summary",
+    },
+    manifest: lang === "ja" ? "manifest-ja.json" : "manifest.json",
+  };
+}
 
 export default async function RootLayout({
   children,
@@ -38,16 +57,19 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+  const lang = locale();
 
   return (
-    <html lang="en">
+    <html lang={lang}>
       <body>
         <ClientSessionProvider session={session}>
-          <VStack alignItems="center">
-            <VStack w="2xl" maxW="100vw" alignItems="stretch">
-              {children}
+          <LocaleProvider locale={lang}>
+            <VStack alignItems="center">
+              <VStack w="2xl" maxW="100vw" alignItems="stretch">
+                {children}
+              </VStack>
             </VStack>
-          </VStack>
+          </LocaleProvider>
         </ClientSessionProvider>
         <Analytics />
         <SpeedInsights />

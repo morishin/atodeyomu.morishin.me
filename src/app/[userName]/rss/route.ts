@@ -3,6 +3,8 @@ import { type NextRequest } from "next/server";
 import RSS from "rss";
 
 import { prisma } from "@/lib/prisma";
+import { locale } from "@/lib/i18n/locale";
+import { i18n } from "@/lib/i18n/strings";
 
 export async function GET(
   request: NextRequest,
@@ -32,8 +34,15 @@ export async function GET(
     notFound();
   }
 
+  const lang = locale();
+  const title = `${
+    isRead
+      ? i18n("{{username}}'s reads", lang).replace("{{username}}", user.name)
+      : i18n("{{username}}'s unreads", lang).replace("{{username}}", user.name)
+  } | ${i18n("ato de yomu", lang)}`;
+
   const feed = new RSS({
-    title: `${user.name}'s ${isRead ? "reads" : "unreads"} | ato de yomu`,
+    title,
     site_url: `${request.nextUrl.protocol}//${request.nextUrl.host}`,
     feed_url: request.nextUrl.href,
   });

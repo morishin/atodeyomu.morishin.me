@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useActionState, useCallback, useEffect } from "react";
+import { useActionState, useCallback, useContext, useEffect } from "react";
 import useSWRInfinite from "swr/infinite";
 
 import { AddPageForm } from "@/app/[userName]/AddPageForm";
@@ -24,6 +24,8 @@ import { apiUserPageDefaultPerPage } from "@/app/api/users/[userName]/pages/apiU
 import { requestMarkAllAsRead } from "@/app/[userName]/MarkAllAsReadFormAction";
 import { Badge } from "@/components/park-ui/badge";
 import { Text } from "@/components/park-ui";
+import { LocaleContext } from "@/lib/i18n/LocaleProvider";
+import { i18n } from "@/lib/i18n/strings";
 
 const fetcher: (url: string) => Promise<ApiUserPageResponse> = (url: string) =>
   fetch(url).then((r) => r.json());
@@ -103,15 +105,17 @@ export const Content = ({
   const searchParams = useSearchParams();
   const currentTab = searchParams.get("read") === "1" ? "read" : "unread";
 
+  const { locale } = useContext(LocaleContext);
+
   const newPageAdded = searchParams.get("newPageAdded") === "1";
   useEffect(() => {
     if (newPageAdded) {
       toaster.create({
-        title: "Added to unread",
+        title: i18n("Added to your unread", locale),
         type: "success",
       });
     }
-  }, [newPageAdded]);
+  }, [locale, newPageAdded]);
 
   const [
     { state: markAllAsReadState, timestamp: markAllAsReadTimestamp },
@@ -125,11 +129,11 @@ export const Content = ({
     if (markAllAsReadState === "success") {
       refresh();
       toaster.create({
-        title: "Marked all as read",
+        title: i18n("Marked all as read", locale),
         type: "success",
       });
     }
-  }, [markAllAsReadState, refresh, markAllAsReadTimestamp]);
+  }, [markAllAsReadState, refresh, markAllAsReadTimestamp, locale]);
 
   return (
     <VStack gap={{ base: "6", smDown: "4" }}>
@@ -147,7 +151,9 @@ export const Content = ({
           <Tabs.List flex="1">
             <Link href={pathname}>
               <Tabs.Trigger key={"unread"} value={"unread"}>
-                <Text fontSize={{ base: "md", smDown: "sm" }}>Unread</Text>
+                <Text fontSize={{ base: "md", smDown: "sm" }}>
+                  {i18n("Unread", locale)}
+                </Text>
                 <Badge size="sm" variant="subtle">
                   {unreadData.data?.[0]?.totalCount ?? 0}
                 </Badge>
@@ -155,7 +161,9 @@ export const Content = ({
             </Link>
             <Link href="?read=1">
               <Tabs.Trigger key={"read"} value={"read"}>
-                <Text fontSize={{ base: "md", smDown: "sm" }}>Read</Text>
+                <Text fontSize={{ base: "md", smDown: "sm" }}>
+                  {i18n("Read", locale)}
+                </Text>
                 <Badge size="sm" variant="subtle">
                   {readData.data?.[0]?.totalCount ?? 0}
                 </Badge>
@@ -175,7 +183,11 @@ export const Content = ({
               <form
                 action={markAllAsReadAction}
                 onSubmit={(e) => {
-                  if (!confirm("Are you sure you want to mark all as read?")) {
+                  if (
+                    !confirm(
+                      i18n("Are you sure you want to mark all as read?", locale)
+                    )
+                  ) {
                     e.preventDefault();
                   }
                 }}
@@ -187,7 +199,7 @@ export const Content = ({
                   loading={isMarkAllAsReadPending}
                 >
                   <CheckCheckIcon color="green" />
-                  Mark all as read
+                  {i18n("Mark all as read", locale)}
                 </Button>
               </form>
             </Box>
@@ -206,8 +218,8 @@ export const Content = ({
             toaster={toaster}
             emptyMessage={
               readData.data?.[0]?.pages.length === 0
-                ? "No pages have been added yet."
-                : "All done!"
+                ? i18n("No pages have been added yet.", locale)
+                : i18n("All done!", locale)
             }
           />
         </Tabs.Content>
@@ -222,7 +234,7 @@ export const Content = ({
             showLoadMore={showLoadMoreRead}
             refresh={refresh}
             toaster={toaster}
-            emptyMessage="No pages have been done yet."
+            emptyMessage={i18n("No pages have been added yet.", locale)}
           />
         </Tabs.Content>
       </Tabs.Root>

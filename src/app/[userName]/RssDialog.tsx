@@ -1,4 +1,5 @@
 import { CheckIcon, CopyIcon, XIcon } from "lucide-react";
+import { useContext } from "react";
 
 import { Button } from "@/components/park-ui/button";
 import { Dialog } from "@/components/park-ui/dialog";
@@ -6,6 +7,8 @@ import { Stack, VStack } from "@styled-system/jsx";
 import { Clipboard } from "@/components/park-ui/clipboard";
 import { Input } from "@/components/park-ui/styled/clipboard";
 import { FormLabel } from "@/components/park-ui/form-label";
+import { i18n } from "@/lib/i18n/strings";
+import { LocaleContext } from "@/lib/i18n/LocaleProvider";
 
 export const RssDialog = ({ children }: { children: JSX.Element }) => {
   const url =
@@ -13,6 +16,7 @@ export const RssDialog = ({ children }: { children: JSX.Element }) => {
       ? new URL(`${location.pathname.replace(/\/$/, "")}/rss`, location.href)
           .href
       : "";
+  const { locale } = useContext(LocaleContext);
   return (
     <Dialog.Root lazyMount={true}>
       <Dialog.Trigger cursor="pointer" asChild>
@@ -25,13 +29,13 @@ export const RssDialog = ({ children }: { children: JSX.Element }) => {
             <Stack gap="1">
               <Dialog.Title>RSS</Dialog.Title>
               <Dialog.Description>
-                You can subscribe to this page with RSS.
+                {i18n("You can subscribe to the list as RSS feed.", locale)}
               </Dialog.Description>
             </Stack>
             <VStack alignItems="stretch">
               <Clipboard.Root value={url}>
                 <Clipboard.Label asChild>
-                  <FormLabel>Unread</FormLabel>
+                  <FormLabel>{i18n("Unread", locale)}</FormLabel>
                 </Clipboard.Label>
                 <Clipboard.Control>
                   <Clipboard.Input asChild>
@@ -56,7 +60,7 @@ export const RssDialog = ({ children }: { children: JSX.Element }) => {
 
               <Clipboard.Root value={`${url}?read=1`}>
                 <Clipboard.Label asChild>
-                  <FormLabel>Read</FormLabel>
+                  <FormLabel>{i18n("Read", locale)}</FormLabel>
                 </Clipboard.Label>
                 <Clipboard.Control>
                   <Clipboard.Input asChild>

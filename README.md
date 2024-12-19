@@ -10,6 +10,10 @@ cp .env.example .env # And edit .env
 ```
 
 ```sh
+docker compose up
+```
+
+```sh
 npm i --legacy-peer-deps
 npm run dev
 ```

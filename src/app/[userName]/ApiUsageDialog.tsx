@@ -1,5 +1,5 @@
 import { CheckIcon, CopyIcon, RefreshCcwIcon, XIcon } from "lucide-react";
-import { useActionState } from "react";
+import { useActionState, useContext } from "react";
 import Image from "next/image";
 
 import { Button } from "@/components/park-ui/button";
@@ -13,6 +13,8 @@ import { Collapsible } from "@/components/park-ui/collapsible";
 import { requestAccessTokenRotate } from "@/app/[userName]/AccessTokenRotateFormAction";
 import { LoggedInUser } from "@/lib/types";
 import { Text } from "@/components/park-ui";
+import { LocaleContext } from "@/lib/i18n/LocaleProvider";
+import { i18n } from "@/lib/i18n/strings";
 
 export const ApiUsageDialog = ({
   open,
@@ -42,6 +44,8 @@ export const ApiUsageDialog = ({
 -H "Authorization: Bearer ${personalAccessToken}" \
 -d '{"url": "https://example.com" }'`;
 
+  const { locale } = useContext(LocaleContext);
+
   return (
     <Dialog.Root
       lazyMount={true}
@@ -62,9 +66,9 @@ export const ApiUsageDialog = ({
         >
           <Stack p="6">
             <Stack gap="1">
-              <Dialog.Title>API Usage</Dialog.Title>
+              <Dialog.Title>{i18n("API Usage", locale)}</Dialog.Title>
               <Dialog.Description>
-                You can also add pages to the list via API.
+                {i18n("You can also add pages to the list via API.", locale)}
               </Dialog.Description>
             </Stack>
             <Stack>
@@ -75,7 +79,7 @@ export const ApiUsageDialog = ({
                 borderBottomColor="gray.8"
               >
                 <Clipboard.Label asChild>
-                  <FormLabel>Your Access Token</FormLabel>
+                  <FormLabel>{i18n("Your Access Token", locale)}</FormLabel>
                 </Clipboard.Label>
                 <Clipboard.Control>
                   <Clipboard.Input asChild>
@@ -101,7 +105,10 @@ export const ApiUsageDialog = ({
                     onSubmit={(e) => {
                       if (
                         !confirm(
-                          "Are you sure you want to rotate the access token? This will invalidate the current access token."
+                          i18n(
+                            "Are you sure you want to rotate the access token? This will invalidate the current access token.",
+                            locale
+                          )
                         )
                       ) {
                         e.preventDefault();
@@ -122,7 +129,7 @@ export const ApiUsageDialog = ({
                 </Clipboard.Control>
               </Clipboard.Root>
             </Stack>
-            <Section title="Add a page via cURL">
+            <Section title={i18n("Add a page via cURL", locale)}>
               <Clipboard.Root value={exampleCode}>
                 <Clipboard.Control>
                   <Clipboard.Input asChild>
@@ -150,7 +157,10 @@ export const ApiUsageDialog = ({
             </Section>
             <Section title="Add a page via iOS share sheet">
               <Dialog.Description>
-                You can add a page from the share sheet by using iOS Shortcuts.
+                {i18n(
+                  "You can add a page from the share sheet by using iOS Shortcuts.",
+                  locale
+                )}
               </Dialog.Description>
               <ol
                 style={{
@@ -164,7 +174,9 @@ export const ApiUsageDialog = ({
                 }}
               >
                 <li>
-                  <Text as="span">Download the shortcut.</Text>
+                  <Text as="span">
+                    {i18n("Download the shortcut.", locale)}
+                  </Text>
                   <Box marginLeft="5">
                     <a
                       href="https://www.icloud.com/shortcuts/49d2a7898efe4f8b86406fb58a58fa1c"
@@ -177,13 +189,13 @@ export const ApiUsageDialog = ({
                           height="32"
                           alt=""
                         />
-                        Download
+                        {i18n("Download", locale)}
                       </Button>
                     </a>
                   </Box>
                 </li>
                 <li>
-                  <Text as="span">Setup the shortcut</Text>
+                  <Text as="span">{i18n("Setup the shortcut", locale)}</Text>
                   <Box marginLeft="5">
                     <Image
                       src="/configure_shortcut.png"
@@ -195,7 +207,10 @@ export const ApiUsageDialog = ({
                 </li>
                 <li>
                   <Text as="span">
-                    Available in the share sheet opened from Safari.
+                    {i18n(
+                      "Available in the share sheet opened from Safari.",
+                      locale
+                    )}
                   </Text>
                   <Box marginLeft="5">
                     <Image
@@ -208,9 +223,9 @@ export const ApiUsageDialog = ({
                 </li>
               </ol>
             </Section>
-            <Section title="Add a page via Android share menu">
+            <Section title={i18n("Add a page via Android share menu", locale)}>
               <Dialog.Description>
-                You can add a page from the share menu.
+                {i18n("You can add a page from the share menu.", locale)}
               </Dialog.Description>
               <ol
                 style={{
@@ -224,7 +239,9 @@ export const ApiUsageDialog = ({
                 }}
               >
                 <li>
-                  <Text as="span">Add to Home screen. (Install it as PWA)</Text>
+                  <Text as="span">
+                    {i18n("Add to Home screen. (Install it as PWA)", locale)}
+                  </Text>
                   <Image
                     src="/android-share-1.png"
                     width="948"
@@ -234,7 +251,7 @@ export const ApiUsageDialog = ({
                 </li>
                 <li>
                   <Text as="span">
-                    Available in the share menu from browser.
+                    {i18n("Available in the share menu from browser.", locale)}
                   </Text>
                   <Image
                     src="/android-share-2.png"
@@ -245,9 +262,12 @@ export const ApiUsageDialog = ({
                 </li>
               </ol>
             </Section>
-            <Section title="Add a page via Chrome Extension">
+            <Section title={i18n("Add a page via Chrome Extension", locale)}>
               <Dialog.Description>
-                You can add a page by using a Chrome Extension.
+                {i18n(
+                  "You can add a page by using a Chrome Extension.",
+                  locale
+                )}
               </Dialog.Description>
               <ol
                 style={{
@@ -261,7 +281,9 @@ export const ApiUsageDialog = ({
                 }}
               >
                 <li>
-                  <Text as="span">Download the Chrome Extension.</Text>
+                  <Text as="span">
+                    {i18n("Download the Chrome Extension.", locale)}
+                  </Text>
                   <Box marginLeft="5">
                     <a
                       href="https://chromewebstore.google.com/detail/atode-yomu-client/dannfglgdahhnfmofngclkoicbikicgj"
@@ -274,13 +296,13 @@ export const ApiUsageDialog = ({
                           height="28"
                           alt=""
                         />
-                        Download
+                        {i18n("Download", locale)}
                       </Button>
                     </a>
                   </Box>
                 </li>
                 <li>
-                  <Text as="span">Setup the extension</Text>
+                  <Text as="span">{i18n("Setup the extension", locale)}</Text>
                   <Box marginLeft="5">
                     <Image
                       src="/configure_chrome_extension.png"
@@ -292,7 +314,10 @@ export const ApiUsageDialog = ({
                 </li>
                 <li>
                   <Text as="span">
-                    Click the extension button on the page you want to add.
+                    {i18n(
+                      "Click the extension button on the page you want to add.",
+                      locale
+                    )}
                   </Text>
                   <Box marginLeft="5">
                     <Image
@@ -305,16 +330,9 @@ export const ApiUsageDialog = ({
                 </li>
               </ol>
             </Section>
-            <Section title=" Add a page via Alfred Workflow">
+            <Section title={i18n("Add a page via Alfred Workflow", locale)}>
               <Dialog.Description>
-                You can add a page by using{" "}
-                <a
-                  style={{ textDecoration: "underline" }}
-                  href="https://www.alfredapp.com/"
-                >
-                  Alfred
-                </a>{" "}
-                Workflow.
+                {i18n("You can add a page by using Alfred Workflow.", locale)}
               </Dialog.Description>
               <ol
                 style={{
@@ -328,7 +346,9 @@ export const ApiUsageDialog = ({
                 }}
               >
                 <li>
-                  <Text as="span">Download the Alfred Workflow.</Text>
+                  <Text as="span">
+                    {i18n("Download the Alfred Workflow.", locale)}
+                  </Text>
                   <Box marginLeft="5">
                     <a href="/atodeyomu.alfredworkflow" target="_blank">
                       <Button variant="subtle">
@@ -338,13 +358,13 @@ export const ApiUsageDialog = ({
                           height="26"
                           alt=""
                         />
-                        Download
+                        {i18n("Download", locale)}
                       </Button>
                     </a>
                   </Box>
                 </li>
                 <li>
-                  <Text as="span">Setup the workflow</Text>
+                  <Text as="span">{i18n("Setup the workflow", locale)}</Text>
                   <Box marginLeft="5">
                     <Image
                       src="/import_alfred.png"
@@ -356,7 +376,10 @@ export const ApiUsageDialog = ({
                 </li>
                 <li>
                   <Text as="span">
-                    Run the workflow with the URL you want to add.
+                    {i18n(
+                      "Run the workflow with the URL you want to add.",
+                      locale
+                    )}
                   </Text>
                   <Box marginLeft="5">
                     <Image

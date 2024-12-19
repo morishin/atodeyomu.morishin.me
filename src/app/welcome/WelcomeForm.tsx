@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRightIcon, CircleXIcon, XIcon } from "lucide-react";
-import { useActionState, useEffect } from "react";
+import { useActionState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import { HStack, VStack } from "@styled-system/jsx";
@@ -11,6 +11,8 @@ import { Button } from "@/components/park-ui/button";
 import { requestUpdateUserName } from "@/app/welcome/UpdateUserNameFormAction";
 import { Toast } from "@/components/park-ui/toast";
 import { DeleteUserForm } from "@/app/welcome/DeleteUserForm";
+import { LocaleContext } from "@/lib/i18n/LocaleProvider";
+import { i18n } from "@/lib/i18n/strings";
 
 const toaster = Toast.createToaster({
   placement: "top",
@@ -38,6 +40,8 @@ export const WelcomeForm = ({ currentName }: { currentName: string }) => {
     }
   }, [router, state, timestamp, userName, errorMessage]);
 
+  const { locale } = useContext(LocaleContext);
+
   return (
     <VStack
       alignItems="center"
@@ -46,11 +50,11 @@ export const WelcomeForm = ({ currentName }: { currentName: string }) => {
       gap="7"
     >
       <Text as="h1" fontSize="2xl">
-        Welcome
+        {i18n("Welcome", locale)}
       </Text>
       <form action={action}>
         <VStack gap="4">
-          <Text fontSize="md">Choose your username</Text>
+          <Text fontSize="md">{i18n("Choose your username", locale)}</Text>
           <HStack padding="4" borderRadius="xl" bgColor="gray.3">
             <Text fontSize="md">atodeyomu.morishin.me</Text>
             <Text fontSize="md">/</Text>
@@ -67,7 +71,7 @@ export const WelcomeForm = ({ currentName }: { currentName: string }) => {
             </Field.Root>
           </HStack>
           <Button type="submit" disabled={isPending} loading={isPending}>
-            Get Started
+            {i18n("Get Started", locale)}
             <ArrowRightIcon />
           </Button>
         </VStack>

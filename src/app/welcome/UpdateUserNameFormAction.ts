@@ -1,6 +1,8 @@
 "use server";
 
 import { auth } from "@/lib/auth/auth";
+import { locale } from "@/lib/i18n/locale";
+import { i18n } from "@/lib/i18n/strings";
 import { prisma } from "@/lib/prisma";
 
 type UpdateUserNameFormResponse = {
@@ -33,6 +35,8 @@ export async function requestUpdateUserName(
     };
   }
 
+  const lang = locale();
+
   try {
     await prisma.user.update({
       where: {
@@ -47,7 +51,7 @@ export async function requestUpdateUserName(
     return {
       state: "error",
       timestamp: Date.now(),
-      errorMessage: "This name is already taken.",
+      errorMessage: i18n("This name is already taken.", lang),
     };
   }
 

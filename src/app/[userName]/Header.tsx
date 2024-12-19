@@ -7,7 +7,13 @@ import {
   LogInIcon,
   HomeIcon,
 } from "lucide-react";
-import { useActionState, useCallback, useEffect, useState } from "react";
+import {
+  useActionState,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { CreateToasterReturn } from "@ark-ui/react";
 import Link from "next/link";
 
@@ -22,6 +28,8 @@ import { Menu } from "@/components/park-ui/menu";
 import { ApiUsageDialog } from "@/app/[userName]/ApiUsageDialog";
 import { LoggedInUser } from "@/lib/types";
 import { ProfileSettingsDialog } from "@/app/[userName]/ProfileSettingsDialog";
+import { i18n } from "@/lib/i18n/strings";
+import { LocaleContext } from "@/lib/i18n/LocaleProvider";
 
 export const Header = ({
   userName,
@@ -72,6 +80,8 @@ export const Header = ({
   const closeApiUsageDialog = useCallback(() => {
     setIsOpenApiUsageDialog(false);
   }, []);
+
+  const { locale } = useContext(LocaleContext);
 
   return (
     <HStack
@@ -127,7 +137,7 @@ export const Header = ({
                             src={loggedInUser?.image ?? undefined}
                             name={loggedInUser?.name}
                           />{" "}
-                          Home
+                          {i18n("Home", locale)}
                         </HStack>
                       </Menu.Item>
                     </Link>
@@ -137,12 +147,14 @@ export const Header = ({
                     onClick={openProfileSettingsDialog}
                   >
                     <HStack gap="2">
-                      <SettingsIcon /> Edit Profile
+                      <SettingsIcon />
+                      {i18n("Edit Profile", locale)}
                     </HStack>
                   </Menu.Item>
                   <Menu.Item value="api" onClick={openApiUsageDialog}>
                     <HStack gap="2">
-                      <ChevronsLeftRightEllipsisIcon /> API Usage
+                      <ChevronsLeftRightEllipsisIcon />
+                      {i18n("API Usage", locale)}
                     </HStack>
                   </Menu.Item>
                   <Menu.Separator />
@@ -150,7 +162,7 @@ export const Header = ({
                     <Menu.Item value="logout">
                       <HStack gap="2">
                         <LogOutIcon />
-                        Logout
+                        {i18n("Logout", locale)}
                       </HStack>
                     </Menu.Item>
                   </Link>
@@ -161,7 +173,7 @@ export const Header = ({
                     <Menu.Item value="home">
                       <HStack gap="2">
                         <HomeIcon />
-                        Home
+                        {i18n("Home", locale)}
                       </HStack>
                     </Menu.Item>
                   </Link>
@@ -169,7 +181,7 @@ export const Header = ({
                     <Menu.Item value="login">
                       <HStack gap="2">
                         <LogInIcon />
-                        Login
+                        {i18n("Login", locale)}
                       </HStack>
                     </Menu.Item>
                   </Link>

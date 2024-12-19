@@ -1,5 +1,5 @@
 import { XIcon } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useContext, useEffect, useState } from "react";
 import { CreateToasterReturn } from "@ark-ui/react";
 
 import { Text } from "@/components/park-ui";
@@ -13,6 +13,8 @@ import { FileUpload } from "@/components/park-ui/file-upload";
 import { Avatar } from "@/components/park-ui/avatar";
 import { requestUpdateUserName } from "@/app/welcome/UpdateUserNameFormAction";
 import { FormLabel } from "@/components/park-ui/form-label";
+import { LocaleContext } from "@/lib/i18n/LocaleProvider";
+import { i18n } from "@/lib/i18n/strings";
 
 export const ProfileSettingsDialog = ({
   open,
@@ -48,10 +50,12 @@ export const ProfileSettingsDialog = ({
     timestamp: Date.now(),
   } as const);
 
+  const { locale } = useContext(LocaleContext);
+
   useEffect(() => {
     if (userNameState === "success") {
       toaster.create({
-        title: "Username updated",
+        title: i18n("Username updated", locale),
         type: "success",
       });
       onClose();
@@ -63,6 +67,7 @@ export const ProfileSettingsDialog = ({
       });
     }
   }, [
+    locale,
     onClose,
     toaster,
     userName,
@@ -74,7 +79,7 @@ export const ProfileSettingsDialog = ({
   useEffect(() => {
     if (profilePictureState === "success") {
       toaster.create({
-        title: "Profile picture updated",
+        title: i18n("Profile picture updated", locale),
         type: "success",
       });
       onClose();
@@ -91,6 +96,7 @@ export const ProfileSettingsDialog = ({
     userNameErrorMessage,
     userNameState,
     profilePictureTimestamp,
+    locale,
   ]);
 
   const [isEnabledUpdateUserNameButton, setIsEnabledUpdateUserNameButton] =
@@ -120,20 +126,24 @@ export const ProfileSettingsDialog = ({
         >
           <Stack p="6">
             <Stack gap="1">
-              <Dialog.Title>Edit Profile</Dialog.Title>
+              <Dialog.Title>{i18n("Edit Profile", locale)}</Dialog.Title>
             </Stack>
             <VStack alignItems="stretch">
               <VStack gap="4" alignItems="flex-start">
                 <form
                   action={userNameAction}
                   onSubmit={(e) => {
-                    if (!confirm(`Are you sure to update username?`)) {
+                    if (
+                      !confirm(i18n("Are you sure to update username?", locale))
+                    ) {
                       e.preventDefault();
                     }
                   }}
                 >
                   <VStack gap="4" alignItems="flex-start">
-                    <FormLabel fontSize="md">Username</FormLabel>
+                    <FormLabel fontSize="md">
+                      {i18n("Username", locale)}
+                    </FormLabel>
                     <HStack padding="4" borderRadius="xl" bgColor="gray.3">
                       <Text fontSize="md">atodeyomu.morishin.me</Text>
                       <Text fontSize="md">/</Text>
@@ -161,13 +171,15 @@ export const ProfileSettingsDialog = ({
                       loading={isUserNamePending}
                       disabled={!isEnabledUpdateUserNameButton}
                     >
-                      Save Username
+                      {i18n("Save Username", locale)}
                     </Button>
                   </VStack>
                 </form>
                 <form action={profilePictureAction}>
                   <VStack gap="4" alignItems="flex-start">
-                    <FormLabel fontSize="md">Picture</FormLabel>
+                    <FormLabel fontSize="md">
+                      {i18n("Picture", locale)}
+                    </FormLabel>
                     <FileUpload.Root
                       maxFileSize={4.5 * 2 ** 20} // 4.5MB
                       onFileReject={(details) => {
@@ -240,7 +252,7 @@ export const ProfileSettingsDialog = ({
                       loading={isProfilePicturePending}
                       disabled={!isEnabledUpdateProfilePictureButton}
                     >
-                      Save Picture
+                      {i18n("Save Picture", locale)}
                     </Button>
                   </VStack>
                 </form>

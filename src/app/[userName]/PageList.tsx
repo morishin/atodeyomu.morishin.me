@@ -1,11 +1,14 @@
 import { SWRInfiniteResponse } from "swr/infinite";
 import { CreateToasterReturn } from "@ark-ui/react";
+import { useContext } from "react";
 
 import { ApiUserPageResponse } from "@/app/api/users/[userName]/pages/fetchPages";
 import { Text } from "@/components/park-ui";
 import { VStack } from "@styled-system/jsx";
 import { Button } from "@/components/park-ui/button";
 import { PageListItem } from "@/app/[userName]/PageListItem";
+import { LocaleContext } from "@/lib/i18n/LocaleProvider";
+import { i18n } from "@/lib/i18n/strings";
 
 export const PageList = ({
   data,
@@ -30,6 +33,7 @@ export const PageList = ({
   toaster: CreateToasterReturn;
   emptyMessage: string;
 }) => {
+  const { locale } = useContext(LocaleContext);
   return (
     <VStack alignItems="stretch">
       {data?.map((res) =>
@@ -50,7 +54,7 @@ export const PageList = ({
           loading={isLoading}
           onClick={() => setSize(size + 1)}
         >
-          Load More
+          {i18n("Load More", locale)}
         </Button>
       ) : data?.[0]?.pages.length === 0 ? (
         <Text paddingTop="6" color="fg.subtle" textAlign="center">
