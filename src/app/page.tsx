@@ -46,7 +46,14 @@ export default async function Home() {
           lang
         )}
       </Text>
-      <Stack gap="4" flexDirection={{ base: "row", smDown: "column" }}>
+      <Stack
+        gap="4"
+        flexDirection={{ base: "row", smDown: "column" }}
+        justifyContent="center"
+        width={{ smDown: "2xs" }}
+        maxWidth="100%"
+        paddingInline={{ base: "0", smDown: "8" }}
+      >
         <Link href="/api/auth/signin">
           <Button variant="solid" size="xl" width={{ smDown: "100%" }}>
             {i18n("Get Started", lang)}

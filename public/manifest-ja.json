@@ -1,7 +1,7 @@
 {
   "name": "未読に追加",
   "short_name": "あとで読む",
-  "description": "あとで読みたいウェブページを保存して未読管理したりリストを共有することができるリーディングリストアプリ",
+  "description": "あとで読みたいウェブページを保存して未読管理したりリストを共有することができるリーディングリストアプリです。",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fff",
