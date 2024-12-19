@@ -60,7 +60,7 @@ export default async function RootLayout({
   const lang = locale();
 
   return (
-    <html lang={lang}>
+    <html lang={lang === "ja" ? "ja" : "en"}>
       <body>
         <ClientSessionProvider session={session}>
           <LocaleProvider locale={lang}>
