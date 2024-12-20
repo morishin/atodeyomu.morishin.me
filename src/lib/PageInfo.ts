@@ -71,7 +71,6 @@ const PageInfo = {
           .querySelector('link[rel="icon"]')
           ?.getAttribute("href")
       ) ?? getMetaContent("property", "og:image");
-    null;
 
     await happyDOMWindow.happyDOM.close();
 

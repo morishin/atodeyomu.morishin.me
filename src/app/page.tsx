@@ -18,7 +18,7 @@ export default async function Home() {
     await redirectToWelcomePageIfNeeded(session);
     redirect(`/${session.user.name}`);
   }
-  const lang = locale();
+  const lang = await locale();
   return (
     <VStack
       alignItems="center"

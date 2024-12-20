@@ -20,7 +20,7 @@ export async function generateMetadata(
   _props: Props,
   _parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const lang = locale();
+  const lang = await locale();
   const title = i18n("ato de yomu", lang);
   const description = i18n(
     "Save web pages to read later, track your reading history, and share your lists—or keep them private.",
@@ -57,7 +57,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
-  const lang = locale();
+  const lang = await locale();
 
   return (
     <html lang={lang === "ja" ? "ja" : "en"}>

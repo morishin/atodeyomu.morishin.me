@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(
   request: Request,
-  { params }: { params: { userName: string } }
+  { params }: { params: Promise<{ userName: string }> }
 ): Promise<NextResponse> {
   if (request.body === null) {
     return NextResponse.json(null, { status: 400 });
@@ -15,8 +15,9 @@ export async function POST(
   if (!session?.user) {
     return NextResponse.json(null, { status: 401 });
   }
+  const { userName } = await params;
   const user = await prisma.user.findUnique({
-    where: { name: params.userName },
+    where: { name: userName },
   });
   if (!user) {
     return NextResponse.json(null, { status: 404 });
@@ -28,7 +29,7 @@ export async function POST(
   const filename = searchParams.get("filename");
   const extension = filename?.split(".").pop() ?? null;
   const timestamp = new Date().getTime();
-  const newFilename = `${params.userName}-${timestamp}${extension ? `.${extension}` : ""}`;
+  const newFilename = `${userName}-${timestamp}${extension ? `.${extension}` : ""}`;
 
   const blob = await put(newFilename, request.body, {
     access: "public",
