@@ -8,10 +8,11 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userName: string } }
+  { params }: { params: Promise<{ userName: string }> }
 ) {
+  const { userName } = await params;
   const user = await prisma.user.findUnique({
-    where: { name: params.userName },
+    where: { name: userName },
   });
   if (!user) {
     notFound();
@@ -46,10 +47,11 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { userName: string } }
+  { params }: { params: Promise<{ userName: string }> }
 ) {
+  const userName = (await params).userName;
   const user = await prisma.user.findUnique({
-    where: { name: params.userName },
+    where: { name: userName },
   });
   if (!user) {
     notFound();

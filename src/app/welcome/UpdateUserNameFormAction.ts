@@ -35,7 +35,7 @@ export async function requestUpdateUserName(
     };
   }
 
-  const lang = locale();
+  const lang = await locale();
 
   try {
     await prisma.user.update({
@@ -48,6 +48,7 @@ export async function requestUpdateUserName(
       },
     });
   } catch (error) {
+    console.error(error);
     return {
       state: "error",
       timestamp: Date.now(),

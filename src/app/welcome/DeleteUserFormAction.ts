@@ -22,6 +22,7 @@ export async function requestDeleteUser(): Promise<DeleteUserFormResponse> {
       },
     });
   } catch (error) {
+    console.error(error);
     return {
       state: "error",
       timestamp: Date.now(),

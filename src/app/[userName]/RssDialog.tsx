@@ -10,7 +10,7 @@ import { FormLabel } from "@/components/park-ui/form-label";
 import { i18n } from "@/lib/i18n/strings";
 import { LocaleContext } from "@/lib/i18n/LocaleProvider";
 
-export const RssDialog = ({ children }: { children: JSX.Element }) => {
+export const RssDialog = ({ children }: { children: React.ReactNode }) => {
   const url =
     typeof location === "object"
       ? new URL(`${location.pathname.replace(/\/$/, "")}/rss`, location.href)

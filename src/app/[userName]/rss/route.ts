@@ -8,12 +8,13 @@ import { i18n } from "@/lib/i18n/strings";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userName: string } }
+  { params }: { params: Promise<{ userName: string }> }
 ) {
   const isRead = Boolean(Number(request.nextUrl.searchParams.get("read")));
 
+  const userName = (await params).userName;
   const user = await prisma.user.findUnique({
-    where: { name: params.userName },
+    where: { name: userName },
     include: {
       pages: {
         where: {
@@ -34,7 +35,7 @@ export async function GET(
     notFound();
   }
 
-  const lang = locale();
+  const lang = await locale();
   const title = `${
     isRead
       ? i18n("{{username}}'s reads", lang).replace("{{username}}", user.name)

@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { type ResolvingMetadata } from "next";
 
 import { Content } from "@/app/[userName]/Content";
 import { fetchPages } from "@/app/api/users/[userName]/pages/fetchPages";
@@ -13,19 +12,20 @@ import { locale } from "@/lib/i18n/locale";
 import { i18n } from "@/lib/i18n/strings";
 
 export async function generateMetadata({
-  params: { userName },
+  params,
   searchParams,
 }: {
-  params: { userName: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ userName: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const userName = (await params).userName;
   if (userName.match(/[^a-zA-Z0-9_-]/)) {
     notFound();
   }
 
-  const lang = locale();
+  const lang = await locale();
 
-  const isRead = searchParams.read === "1";
+  const isRead = (await searchParams).read === "1";
   const title = `${
     isRead
       ? i18n("{{username}}'s reads", lang).replace("{{username}}", userName)
@@ -62,11 +62,12 @@ export async function generateMetadata({
 }
 
 export default async function Page({
-  params: { userName },
+  params,
 }: {
-  params: { userName: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ userName: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const { userName } = await params;
   if (userName.match(/[^a-zA-Z0-9_-]/)) {
     notFound();
   }

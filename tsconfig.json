@@ -25,5 +25,5 @@
     "baseUrl": ".",
   },
   "include": ["next-env.d.ts", "src/lib/global.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "styled-system"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", ".next", "public", "src/components/park-ui/**/*", "src/lib/create-style-context.tsx"],
 }

@@ -3,10 +3,10 @@ import { headers } from "next/headers";
 export type Locale = "default" | "ja";
 
 // Use it in server contexts
-export const locale = () => {
+export const locale = async () => {
   // 検索エンジンには日本語のコンテンツを返したいが、ユーザーにはユーザーの使用言語に応じたコンテンツを返したい。
 
-  const acceptLanguage = headers().get("accept-language");
+  const acceptLanguage = (await headers()).get("accept-language");
   if (!acceptLanguage) {
     // Google クローラーは Accept-Language ヘッダーを送信しないため、クローラーの場合は日本語を返す。
     return "ja";
