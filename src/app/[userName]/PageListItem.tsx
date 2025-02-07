@@ -125,6 +125,7 @@ export const PageListItem = ({
             textOverflow="ellipsis"
             lineClamp={{ smDown: 2, base: 1 }}
             textWrap="pretty"
+            wordBreak="break-all"
           >
             {page.title}
           </Text>
@@ -136,6 +137,7 @@ export const PageListItem = ({
             textOverflow="ellipsis"
             lineClamp={1}
             color="fg.subtle"
+            wordBreak="break-all"
           >
             {page.description}
           </Text>
