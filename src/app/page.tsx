@@ -37,7 +37,7 @@ export default async function Home() {
           </Text>
         </Link>
         <Text fontSize="xs" color="fg.subtle">
-          /äto de jomɯ/
+          /ato de jomɯ/
         </Text>
       </VStack>
       <Text fontSize="xl">
