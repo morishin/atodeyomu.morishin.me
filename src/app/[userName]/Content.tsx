@@ -117,6 +117,8 @@ export const Content = ({
     }
   }, [locale, newPageAdded]);
 
+  const showMarkAllAsRead = isMyPage && unreadData.data?.[0]?.pages.length !== 0 && currentTab === "unread";
+
   const [
     { state: markAllAsReadState, timestamp: markAllAsReadTimestamp },
     markAllAsReadAction,
@@ -171,12 +173,7 @@ export const Content = ({
             </Link>
             <Tabs.Indicator />
             <Box
-              display={
-                unreadData.data?.[0]?.pages.length !== 0 &&
-                currentTab === "unread"
-                  ? "block"
-                  : "none"
-              }
+              display={showMarkAllAsRead ? "block" : "none"}
               marginRight={{ smDown: "4" }}
               marginLeft="auto"
             >
