@@ -4,9 +4,17 @@ export type Locale = "default" | "ja";
 
 // Use it in server contexts
 export const locale = async () => {
+  const h = await headers();
+
+  // URL-based override: /en は常に英語を返す（英語 SEO 用）
+  const pathname = h.get("x-pathname");
+  if (pathname && (pathname === "/en" || pathname.startsWith("/en/"))) {
+    return "default";
+  }
+
   // 検索エンジンには日本語のコンテンツを返したいが、ユーザーにはユーザーの使用言語に応じたコンテンツを返したい。
 
-  const acceptLanguage = (await headers()).get("accept-language");
+  const acceptLanguage = h.get("accept-language");
   if (!acceptLanguage) {
     // Google クローラーは Accept-Language ヘッダーを送信しないため、クローラーの場合は日本語を返す。
     return "ja";

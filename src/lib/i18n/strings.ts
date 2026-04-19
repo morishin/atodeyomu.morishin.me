@@ -216,6 +216,143 @@ const strings = {
   "Run the workflow with the URL you want to add.": {
     ja: "追加したいページのURLを入力してワークフローを実行します。",
   },
+  "The read-it-later app that stays out of your way.": {
+    ja: "あとで読みたい記事をためておき、自分のペースで消化できるリーディングリストアプリ。",
+  },
+  "Save web pages in one tap, track what you've read, and share your list—or keep it private.":
+    {
+      ja: "ワンタップでウェブページを保存。既読・未読を管理しながら、自分のリーディングリストを公開することも非公開にすることもできます。",
+    },
+  "Why ato de yomu?": {
+    ja: "ato de yomu の特徴",
+  },
+  "A simple, fast reading list app that respects your time.": {
+    ja: "あとで読むだけのために作った、シンプルで速いリーディングリストです。",
+  },
+  "Unread / Read tracking": {
+    ja: "未読・既読の管理",
+  },
+  "A clear inbox of unread pages and a searchable history of what you've finished. Mark all as read when you declare reading bankruptcy.":
+    {
+      ja: "未読タブでこれから読むものを、既読タブで読んだ履歴を一覧できます。未読が溜まり過ぎたら「すべて既読にする」でリセットも可能です。",
+    },
+  "Save from anywhere": {
+    ja: "どこからでも保存",
+  },
+  "PWA share target, iOS Shortcuts, Chrome Extension, Alfred Workflow, or plain cURL — add pages the way that fits your workflow.":
+    {
+      ja: "PWA（ホーム画面に追加）、iOSショートカット、Chrome拡張、Alfred Workflow、そして cURL。あなたのワークフローに合わせてページを追加できます。",
+    },
+  "Public or private lists": {
+    ja: "公開・非公開を選べる",
+  },
+  "Share your reading list as a public profile, or flip one switch to make everything private. Each page can also be set public or private individually.":
+    {
+      ja: "自分のリストを公開プロフィールとしてシェアすることも、スイッチ一つで全非公開にすることもできます。ページ単位の公開設定も可能。",
+    },
+  "RSS for public lists": {
+    ja: "公開リストは RSS 対応",
+  },
+  "Every public list has an RSS feed, so friends can follow what you're reading from their favorite reader.":
+    {
+      ja: "公開リストには RSS フィードが自動で付いてきます。フォロワーは好きな RSS リーダーで購読できます。",
+    },
+  "API & Personal Access Token": {
+    ja: "API とアクセストークン",
+  },
+  "Automate adding pages from your own scripts, Shortcuts, or custom tools with a personal access token.":
+    {
+      ja: "個人用アクセストークンで、スクリプトやショートカットから自由にページを追加できる API を提供しています。",
+    },
+  "Free and open": {
+    ja: "無料で使える",
+  },
+  "ato de yomu is free to use. No ads, no tracking pixels, no upsell.": {
+    ja: "ato de yomu は無料で使えます。広告もトラッキングピクセルも、アップセルもありません。",
+  },
+  "How to save a page": {
+    ja: "ページの保存方法",
+  },
+  "Use whichever method fits your device.": {
+    ja: "デバイスに合った方法で保存できます。",
+  },
+  "iPhone / iPad": {
+    ja: "iPhone / iPad",
+  },
+  "Install as a PWA from Safari and use Web Share, or install the iOS Shortcut for one-tap saving from the share sheet.":
+    {
+      ja: "Safari から PWA としてホーム画面に追加するか、iOS ショートカットを入れれば共有シートからワンタップで保存できます。",
+    },
+  "Android": {
+    ja: "Android",
+  },
+  "Install as a PWA from Chrome and share pages directly from the share menu.":
+    {
+      ja: "Chrome から PWA をホーム画面に追加すれば、共有メニューから直接ページを保存できます。",
+    },
+  "Desktop browser": {
+    ja: "デスクトップブラウザ",
+  },
+  "Install the Chrome Extension to save the current tab with one click.": {
+    ja: "Chrome 拡張機能をインストールすれば、開いているタブをワンクリックで保存できます。",
+  },
+  "Alfred / CLI": {
+    ja: "Alfred / CLI",
+  },
+  "Use the Alfred Workflow or any script that can POST to the REST API.": {
+    ja: "Alfred Workflow や REST API を叩くスクリプトから保存できます。",
+  },
+  "Frequently asked questions": {
+    ja: "よくある質問",
+  },
+  "What is ato de yomu?": {
+    ja: "ato de yomu（あとで読む）とは？",
+  },
+  "ato de yomu is a read-later / reading list app for saving web pages you want to come back to. It tracks unread and read pages, supports public profiles with RSS, and offers an API — a simple alternative to apps like Readwise Reader, Pocket, and Instapaper.":
+    {
+      ja: "ato de yomu は、あとで読みたいウェブページを保存しておけるリーディングリストアプリです。未読・既読の管理、RSS対応の公開プロフィール、APIを備えた、Readwise Reader や Pocket、Instapaper の代替として使えるシンプルな選択肢です。",
+    },
+  "Is it free?": {
+    ja: "無料ですか？",
+  },
+  "Yes. ato de yomu is free to use for everyone.": {
+    ja: "はい。ato de yomu は誰でも無料で使えます。",
+  },
+  "Can I keep my reading list private?": {
+    ja: "リーディングリストは非公開にできますか？",
+  },
+  "Yes. You can make your entire profile private, or control visibility per page.":
+    {
+      ja: "はい。プロフィール全体を非公開にすることも、ページごとに公開設定を変えることもできます。",
+    },
+  "Can I follow someone else's list?": {
+    ja: "他の人のリストを購読できますか？",
+  },
+  "Every public list has an RSS feed at /<username>/rss. Subscribe from any RSS reader.":
+    {
+      ja: "公開リストには /<ユーザー名>/rss のRSSフィードがあります。好みのRSSリーダーで購読できます。",
+    },
+  "Does it have an API?": {
+    ja: "APIはありますか？",
+  },
+  "Yes. Each user has a personal access token and can POST to /api/users/<username>/pages to add a page. This powers Shortcuts, Alfred, and the Chrome Extension.":
+    {
+      ja: "はい。各ユーザーには個人用アクセストークンが発行され、/api/users/<ユーザー名>/pages へ POST することでページを追加できます。ショートカットや Alfred、Chrome 拡張機能もこのAPIを使っています。",
+    },
+  "How is it different from Readwise, Pocket, or Instapaper?": {
+    ja: "Readwise や Pocket、Instapaperとの違いは？",
+  },
+  "ato de yomu focuses on one thing: a no-frills list of pages to read later, with public/private profiles and RSS built in. It doesn't highlight, summarize, or charge a subscription — it just keeps your list.":
+    {
+      ja: "ato de yomu は「あとで読むページのリスト」という機能に絞っています。公開/非公開プロフィールとRSSを標準装備し、ハイライトや要約、サブスクリプション課金はありません。あくまでリストを管理するためのアプリです。",
+    },
+  "Start reading smarter": {
+    ja: "今すぐはじめる",
+  },
+  "Create a free account with your Google login and start saving pages in seconds.":
+    {
+      ja: "Google ログインでアカウントを作成すれば、数秒でページを保存しはじめられます。",
+    },
 };
 
 export const i18n = (key: keyof typeof strings, locale: Locale) => {

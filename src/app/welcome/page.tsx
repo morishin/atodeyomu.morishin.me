@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
 import { WelcomeForm } from "@/app/welcome/WelcomeForm";
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/prisma";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function Page() {
   const session = await auth();

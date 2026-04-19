@@ -1,0 +1,15 @@
+import type { MetadataRoute } from "next";
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/api/", "/welcome"],
+      },
+    ],
+    sitemap: "https://atodeyomu.morishin.me/sitemap.xml",
+    host: "https://atodeyomu.morishin.me",
+  };
+}
