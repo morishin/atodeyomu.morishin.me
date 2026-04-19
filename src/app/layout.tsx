@@ -12,6 +12,8 @@ import LocaleProvider from "@/lib/i18n/LocaleProvider";
 import { locale } from "@/lib/i18n/locale";
 import { i18n } from "@/lib/i18n/strings";
 
+const SITE_URL = "https://atodeyomu.morishin.me";
+
 type Props = {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -26,28 +28,78 @@ export async function generateMetadata(
     "Save web pages to read later, track your reading history, and share your lists—or keep them private.",
     lang
   );
+  const ogImage =
+    lang === "ja" ? "/og-image-ja.png" : "/og-image.png";
+
   return {
-    title,
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: title,
+      template: `%s | ${title}`,
+    },
     description,
+    applicationName: title,
+    keywords: [
+      "あとで読む",
+      "後で読む",
+      "リーディングリスト",
+      "未読管理",
+      "ブックマーク",
+      "あとで読むアプリ",
+      "read it later",
+      "read later app",
+      "reading list app",
+      "bookmark manager",
+      "save articles to read later",
+      "Readwise alternative",
+      "Pocket alternative",
+      "Instapaper alternative",
+    ],
+    authors: [{ name: "morishin" }],
+    creator: "morishin",
+    publisher: "morishin",
+    alternates: {
+      canonical: "/",
+      languages: {
+        ja: "/",
+        en: "/en",
+        "x-default": "/",
+      },
+      types: {
+        "application/rss+xml": [],
+      },
+    },
     openGraph: {
       title,
       siteName: title,
       description,
       type: "website",
-      url: "https://atodeyomu.morishin.me",
+      url: SITE_URL,
+      locale: lang === "ja" ? "ja_JP" : "en_US",
       images: {
-        url:
-          lang === "ja"
-            ? "https://atodeyomu.morishin.me/og-image-ja.png"
-            : "https://atodeyomu.morishin.me/og-image.png",
+        url: ogImage,
         width: 630,
         height: 630,
+        alt: title,
       },
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
     },
-    manifest: lang === "ja" ? "manifest-ja.json" : "manifest.json",
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+    manifest: lang === "ja" ? "/manifest-ja.json" : "/manifest.json",
   };
 }
 

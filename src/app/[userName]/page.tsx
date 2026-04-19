@@ -25,13 +25,6 @@ export async function generateMetadata({
 
   const lang = await locale();
 
-  const isRead = (await searchParams).read === "1";
-  const title = `${
-    isRead
-      ? i18n("{{username}}'s reads", lang).replace("{{username}}", userName)
-      : i18n("{{username}}'s unreads", lang).replace("{{username}}", userName)
-  } | ${i18n("ato de yomu", lang)}`;
-
   const user = await prisma.user.findUnique({
     where: { name: userName },
   });
@@ -39,24 +32,63 @@ export async function generateMetadata({
     notFound();
   }
 
+  const isRead = (await searchParams).read === "1";
+  const title = isRead
+    ? i18n("{{username}}'s reads", lang).replace("{{username}}", userName)
+    : i18n("{{username}}'s unreads", lang).replace("{{username}}", userName);
+  const ogTitle = `${title} | ${i18n("ato de yomu", lang)}`;
+
+  const description =
+    lang === "ja"
+      ? `${userName} さんのあとで読むリスト。未読・既読のウェブページを ato de yomu で管理しています。`
+      : `${userName}'s reading list on ato de yomu — web pages saved for later, tracked as unread and read.`;
+
+  const fallbackImage =
+    lang === "ja" ? "/og-image-ja.png" : "/og-image.png";
+  const ogImageUrl = user.image ?? fallbackImage;
+
+  const canonicalPath = `/${userName}`;
+
   return {
     title,
+    description,
+    alternates: {
+      canonical: canonicalPath,
+      ...(user.private
+        ? {}
+        : {
+            types: {
+              "application/rss+xml": [
+                {
+                  url: `${canonicalPath}/rss`,
+                  title: `${userName} — ato de yomu RSS`,
+                },
+              ],
+            },
+          }),
+    },
+    robots: user.private
+      ? { index: false, follow: false }
+      : { index: true, follow: true },
     openGraph: {
-      title,
+      title: ogTitle,
       siteName: i18n("ato de yomu", lang),
+      description,
       type: "website",
-      url: `https://atodeyomu.morishin.me/${userName}`,
+      url: `https://atodeyomu.morishin.me${canonicalPath}`,
+      locale: lang === "ja" ? "ja_JP" : "en_US",
       images: {
-        url:
-          user?.image ?? lang === "ja"
-            ? "https://atodeyomu.morishin.me/og-image-ja.png"
-            : "https://atodeyomu.morishin.me/og-image.png",
+        url: ogImageUrl,
         width: 630,
         height: 630,
+        alt: `${userName} — ${i18n("ato de yomu", lang)}`,
       },
     },
     twitter: {
       card: "summary",
+      title: ogTitle,
+      description,
+      images: [ogImageUrl],
     },
   };
 }
